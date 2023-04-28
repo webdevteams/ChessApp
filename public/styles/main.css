@@ -29,3 +29,20 @@ a, a:hover, a:focus, a:active {
     text-decoration: none;
     color: inherit;
 }
+
+#mainlogoimg{
+    border-radius: 10px;
+    width: 50%;
+    height: auto;
+    margin-top: 5vh;
+}
+
+.center{
+    display:block;
+    margin-left: auto;
+    margin-right:auto;
+}
+
+#loginButton{
+    margin-top: 7vh;
+}
