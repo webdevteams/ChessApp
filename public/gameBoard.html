@@ -32,26 +32,134 @@
       </header>
       <ul class="list-group">
         <a id="menuShowAllQuotes" class="list-group-item"><i class="material-icons">people</i>Moves</a>
-        <a id="menuShowMyQuotes" class="list-group-item" href="leaderboard.html"><i class="material-icons">person</i>Leaderboard</a>
+        <a id="menuShowMyQuotes" class="list-group-item" href="leaderboard.html"><i
+            class="material-icons">person</i>Leaderboard</a>
         <a id="menuSignOut" class="list-group-item" href="index.html"><i class="material-icons">logout</i>Log Out</a>
-        <a id="menuDeleteAccount" class="list-group-item" href="deleteAccount.html"><i class="material-icons">Delete</i>Delete Account</a>
+        <a id="menuDeleteAccount" class="list-group-item" href="deleteAccount.html"><i
+            class="material-icons">Delete</i>Delete Account</a>
       </ul>
     </div>
     <main class="bmd-layout-content">
       <div id="listPage" class="container page-container">
         <div id="quoteListContainer">
-      </div>
+        </div>
     </main>
   </div>
 
+
   <div id="mainPage" class="container page-container">
 
+    <table class="chess-board">
+      <tbody>
+        <tr>
+          <th></th>
+          <th>a</th>
+          <th>b</th>
+          <th>c</th>
+          <th>d</th>
+          <th>e</th>
+          <th>f</th>
+          <th>g</th>
+          <th>h</th>
+        </tr>
+        <tr>
+          <th>8</th>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+        </tr>
+        <tr>
+          <th>7</th>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+        </tr>
+        <tr>
+          <th>6</th>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+        </tr>
+        <tr>
+          <th>5</th>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+          <td class="dark"></td>
+          <td class="light"></td>
+        </tr>
+      </tbody>
+    </table>
 
   </div>
   <script src="scripts/jquery.min.js"></script>
   <script src="scripts/popper.js"></script>
   <script src="scripts/bootstrap-material-design.js"></script>
-  <script>$("body").bootstrapMaterialDesign();</script>
+  <script>
+    $("body").bootstrapMaterialDesign();
+  </script>
   <script src="/__/firebase/7.18.0/firebase-app.js"></script>
   <script src="/__/firebase/7.18.0/firebase-analytics.js"></script>
   <script src="/__/firebase/7.18.0/firebase-auth.js"></script>

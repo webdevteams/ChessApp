@@ -7,42 +7,81 @@ body {
     color: white;
 }
 
-.bmd-layout-content{
-    height:100vh;
+.page-container {
+    margin-top: 75px;
 }
 
-.bmd-layout-drawer > header{
+.bmd-layout-content {
+    height: 100vh;
+}
+
+.bmd-layout-drawer>header {
     background-color: #800000;
     color: white;
 }
 
-.bmd-layout-drawer > ul{
+.bmd-layout-drawer>ul {
     background-color: #D9D9D9;
 }
 
-#menuDeleteAccount{
+#menuDeleteAccount {
     margin-top: auto;
     color: red;
 }
 
-a, a:hover, a:focus, a:active {
+a,
+a:hover,
+a:focus,
+a:active {
     text-decoration: none;
     color: inherit;
 }
 
-#mainlogoimg{
+#mainlogoimg {
     border-radius: 10px;
-    width: 50%;
+    width: 40%;
     height: auto;
-    margin-top: 5vh;
-}
-
-.center{
-    display:block;
-    margin-left: auto;
-    margin-right:auto;
-}
-
-#loginButton{
     margin-top: 7vh;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#loginButton {
+    margin-top: 7vh;
+}
+
+.whiteText {
+    color: white;
+}
+
+#loginText {
+    margin-top: 15%;
+}
+
+.chess-board {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.chess-board th {
+    padding: .5em;
+}
+
+.chess-board td {
+    border: 1px solid;
+    width: 2em;
+    height: 2em;
+}
+
+.chess-board .light {
+    background: #41BAE0;
+}
+
+.chess-board .dark {
+    background: #005099;
 }
