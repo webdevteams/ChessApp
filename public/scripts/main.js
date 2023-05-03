@@ -67,7 +67,7 @@ rhit.WhiteAuthManager = class {
 	//TODO: change it so there's a sign in for White and a sign in for black
 	signIn() {
 		console.log("Sign in using rosefire");
-		Rosefire.signIn("6516ed7b-7a30-4c92-9c6b-f4b7179ab9b9", (err, rfUser) => {
+		Rosefire.signIn("41b7b93b-3c9d-4f2c-83cb-e57e90cba145", (err, rfUser) => {
 			if (err) {
 				console.log("Rosefire error!", err);
 				return;
@@ -115,7 +115,7 @@ rhit.BlackAuthManager = class {
 	//TODO: change it so there's a sign in for White and a sign in for black
 	signIn() {
 		console.log("Sign in using rosefire");
-		Rosefire.signIn("6516ed7b-7a30-4c92-9c6b-f4b7179ab9b9", (err, rfUser) => {
+		Rosefire.signIn("41b7b93b-3c9d-4f2c-83cb-e57e90cba145", (err, rfUser) => {
 			if (err) {
 				console.log("Rosefire error!", err);
 				return;
@@ -185,14 +185,15 @@ rhit.main = function () {
 	var isWhiteSignedIn;
 	var isBlackSignedIn;
 	rhit.whiteAuthManager = new rhit.WhiteAuthManager();
-	rhit.whiteAuthManager.beginListening(() => {
-		isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
-	});
+	isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
+	console.log(isWhiteSignedIn);
+	
 
 	rhit.blackAuthManager = new rhit.BlackAuthManager();
-	rhit.blackAuthManager.beginListening(() => {
-		isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
-	});
+	isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
+	// rhit.blackAuthManager.beginListening(() => {
+		
+	// });
 
 
 	console.log(`Is signed in: ${isWhiteSignedIn && isBlackSignedIn}`);
