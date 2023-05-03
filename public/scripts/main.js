@@ -35,9 +35,10 @@ rhit.indexPageController = class {
 
 rhit.whiteLoginPageController = class {
 	constructor() {
-		document.querySelector("#loginButton").onclick = (event) => {
+		document.querySelector("#whiteLoginButton").onclick = (event) => {
 			console.log("TODO: Sign in then redirect to black login page");
-
+			rhit.whiteAuthManager.signIn();
+			
 		};
 	}
 }
