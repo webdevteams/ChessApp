@@ -81,12 +81,36 @@ a:active {
     text-align: center;
 }
 
+@media (min-width: 1px){
+    .chess-board td {
+        border: 2px solid;
+        width: 2.5em;
+        height: 2.5em;
+    }
+}
 
+@media (min-width: 447px){
+    .chess-board td {
+        border: 2px solid;
+        width: 3em;
+        height: 3em;
+    }
+}
 
-.chess-board td {
-    border: 2px solid;
-    width: 5em;
-    height: 5em;
+@media (min-width: 576px){
+    .chess-board td {
+        border: 2px solid;
+        width: 4em;
+        height: 4em;
+    }
+}
+
+@media (min-width: 780px){
+    .chess-board td {
+        border: 2px solid;
+        width: 5em;
+        height: 5em;
+    }
 }
 
 .chess-board .light {
