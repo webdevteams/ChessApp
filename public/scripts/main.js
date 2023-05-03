@@ -38,7 +38,7 @@ rhit.whiteLoginPageController = class {
 		document.querySelector("#whiteLoginButton").onclick = (event) => {
 			console.log("TODO: Sign in then redirect to black login page");
 			rhit.whiteAuthManager.signIn();
-			
+
 		};
 	}
 }
@@ -175,29 +175,7 @@ rhit.BlackAuthManager = class {
 // 	//TODO: Add redirects for the other pages, any besides the logins and index should be allowed if both users are signed in.
 
 // }
-
-
-
-/* Main */
-/** function and class syntax examples */
-rhit.main = function () {
-	console.log("Ready");
-	var isWhiteSignedIn;
-	var isBlackSignedIn;
-	rhit.whiteAuthManager = new rhit.WhiteAuthManager();
-	isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
-	console.log(isWhiteSignedIn);
-	
-
-	rhit.blackAuthManager = new rhit.BlackAuthManager();
-	isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
-	// rhit.blackAuthManager.beginListening(() => {
-		
-	// });
-
-
-	console.log(`Is signed in: ${isWhiteSignedIn && isBlackSignedIn}`);
-
+rhit.initializePage = function () {
 
 	if (document.querySelector("#indexPage")) {
 		new rhit.indexPageController();
@@ -214,6 +192,40 @@ rhit.main = function () {
 	// if(document.querySelector("#leaderboardPage")){
 	// 	new rhit.indexPageController();
 	// }
+}
+
+/* Main */
+/** function and class syntax examples */
+rhit.main = function () {
+	console.log("Ready");
+	var isWhiteSignedIn;
+	var isBlackSignedIn;
+	rhit.whiteAuthManager = new rhit.WhiteAuthManager();
+	rhit.whiteAuthManager.beginListening(() => {
+		isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
+		console.log("white signed in = " + isWhiteSignedIn);
+		// if(isWhiteSignedIn){
+		// 	window.location.href = "/blackLogin.html"
+		// }
+		rhit.initializePage();
+	});
+
+	rhit.blackAuthManager = new rhit.BlackAuthManager();
+
+	rhit.blackAuthManager.beginListening(() => {
+		isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
+		console.log("black signed in = " + isBlackSignedIn);
+		// if(isBlackSignedIn){
+		// 	window.location.href = "/gameBoard.html"
+		// }
+		rhit.initializePage();
+	});
+
+
+	console.log(`Is signed in: ${isWhiteSignedIn && isBlackSignedIn}`);
+
+
+
 
 };
 
