@@ -11,6 +11,11 @@ body {
     margin-top: 75px;
 }
 
+.page-container-board{
+    margin-top: 55px;
+}
+
+
 .bmd-layout-content {
     height: 100vh;
 }
@@ -64,18 +69,25 @@ a:active {
 }
 
 .chess-board {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     border-spacing: 0;
     border-collapse: collapse;
 }
 
 .chess-board th {
     padding: .5em;
+    color: white;
+    text-align: center;
 }
 
+
+
 .chess-board td {
-    border: 1px solid;
-    width: 2em;
-    height: 2em;
+    border: 2px solid;
+    width: 5em;
+    height: 5em;
 }
 
 .chess-board .light {
