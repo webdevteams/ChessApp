@@ -27,6 +27,7 @@ rhit.loginPageController = class {
 
 rhit.indexPageController = class {
 	constructor() {
+		
 		document.querySelector("#loginButton").onclick = (event) => {
 			window.location.href = "/whiteLogin.html";
 		};
@@ -45,9 +46,9 @@ rhit.whiteLoginPageController = class {
 
 rhit.blackLoginPageController = class {
 	constructor() {
-		document.querySelector("#loginButton").onclick = (event) => {
+		document.querySelector("#blackLoginButton").onclick = (event) => {
 			console.log("TODO: Sign in then redirect to gameboard page");
-
+			rhit.blackAuthManager.signIn();
 		};
 	}
 }
@@ -181,14 +182,37 @@ rhit.initializePage = function () {
 		new rhit.indexPageController();
 	}
 	if (document.querySelector("#whiteLoginPage")) {
+		
+		
 		new rhit.whiteLoginPageController();
+		rhit.whiteAuthManager = new rhit.WhiteAuthManager();
+		rhit.whiteAuthManager.signOut();
+		rhit.whiteAuthManager.beginListening(() => {
+			isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
+			if (isWhiteSignedIn) {
+				console.log("user " + rhit.whiteAuthManager.uidWhite);
+				window.location.href = "/blackLogin.html";
+			}
+		});
+
+
 	}
+
 	if (document.querySelector("#blackLoginPage")) {
 		new rhit.blackLoginPageController();
+		rhit.blackAuthManager = new rhit.BlackAuthManager();
+		rhit.blackAuthManager.signOut();
+		rhit.blackAuthManager.beginListening(() => {
+			isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
+			if (isBlackSignedIn) {
+				console.log("user " + rhit.blackAuthManager.uidBlack);
+				window.location.href = "/gameBoard.html"
+			}
+		});
 	}
-	// if(document.querySelector("#gameBoardPage")){
-	// 	new rhit.indexPageController();
-	// }
+	if(document.querySelector("#gameBoardPage")){
+		console.log(`Is signed in: ${rhit.whiteAuthManager.uidWhite}`);
+	}
 	// if(document.querySelector("#leaderboardPage")){
 	// 	new rhit.indexPageController();
 	// }
@@ -200,29 +224,12 @@ rhit.main = function () {
 	console.log("Ready");
 	var isWhiteSignedIn;
 	var isBlackSignedIn;
-	rhit.whiteAuthManager = new rhit.WhiteAuthManager();
-	rhit.whiteAuthManager.beginListening(() => {
-		isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
-		console.log("white signed in = " + isWhiteSignedIn);
-		// if(isWhiteSignedIn){
-		// 	window.location.href = "/blackLogin.html"
-		// }
-		rhit.initializePage();
-	});
-
-	rhit.blackAuthManager = new rhit.BlackAuthManager();
-
-	rhit.blackAuthManager.beginListening(() => {
-		isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
-		console.log("black signed in = " + isBlackSignedIn);
-		// if(isBlackSignedIn){
-		// 	window.location.href = "/gameBoard.html"
-		// }
-		rhit.initializePage();
-	});
 
 
-	console.log(`Is signed in: ${isWhiteSignedIn && isBlackSignedIn}`);
+	rhit.initializePage();
+
+
+	
 
 
 
