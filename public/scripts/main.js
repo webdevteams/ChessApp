@@ -31,6 +31,7 @@ rhit.indexPageController = class {
 		document.querySelector("#loginButton").onclick = (event) => {
 			window.location.href = "/whiteLogin.html";
 		};
+		
 	}
 }
 
@@ -184,7 +185,7 @@ rhit.initializePage = function () {
 	if (document.querySelector("#whiteLoginPage")) {
 		
 		
-		new rhit.whiteLoginPageController();
+		
 		rhit.whiteAuthManager = new rhit.WhiteAuthManager();
 		rhit.whiteAuthManager.signOut();
 		rhit.whiteAuthManager.beginListening(() => {
@@ -195,11 +196,13 @@ rhit.initializePage = function () {
 			}
 		});
 
+		new rhit.whiteLoginPageController();
+
 
 	}
 
 	if (document.querySelector("#blackLoginPage")) {
-		new rhit.blackLoginPageController();
+		
 		rhit.blackAuthManager = new rhit.BlackAuthManager();
 		rhit.blackAuthManager.signOut();
 		rhit.blackAuthManager.beginListening(() => {
@@ -209,6 +212,8 @@ rhit.initializePage = function () {
 				window.location.href = "/gameBoard.html"
 			}
 		});
+
+		new rhit.blackLoginPageController();
 	}
 	if(document.querySelector("#gameBoardPage")){
 		console.log(`Is signed in: ${rhit.whiteAuthManager.uidWhite}`);
