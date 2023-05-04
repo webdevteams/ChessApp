@@ -38,9 +38,7 @@ rhit.indexPageController = class {
 rhit.whiteLoginPageController = class {
 	constructor() {
 		document.querySelector("#whiteLoginButton").onclick = (event) => {
-			console.log("TODO: Sign in then redirect to black login page");
 			rhit.whiteAuthManager.signIn();
-
 		};
 	}
 }
@@ -48,25 +46,41 @@ rhit.whiteLoginPageController = class {
 rhit.blackLoginPageController = class {
 	constructor() {
 		document.querySelector("#blackLoginButton").onclick = (event) => {
-			console.log("TODO: Sign in then redirect to gameboard page");
 			rhit.blackAuthManager.signIn();
+		};
+	}
+}
+
+rhit.gameBoardPageController = class {
+	constructor() {
+		document.querySelector("#menuSignOut").onclick = (event) => {
+			rhit.whiteAuthManager.signOut();
+			rhit.blackAuthManager.signOut();
+		};
+	}
+}
+
+rhit.leaderboardPageController = class {
+	constructor() {
+		document.querySelector("#menuSignOut").onclick = (event) => {
+			rhit.whiteAuthManager.signOut();
+			rhit.blackAuthManager.signOut();
 		};
 	}
 }
 
 rhit.WhiteAuthManager = class {
 	constructor() {
-		//Need to save two users
 		this._whiteUser = null;
 	}
-	//Need a function for every user
+
 	beginListening(changeListener) {
 		firebase.auth().onAuthStateChanged((whiteUser) => {
 			this._whiteUser = whiteUser;
 			changeListener();
 		});
 	}
-	//TODO: change it so there's a sign in for White and a sign in for black
+
 	signIn() {
 		console.log("Sign in using rosefire");
 		Rosefire.signIn("41b7b93b-3c9d-4f2c-83cb-e57e90cba145", (err, rfUser) => {
@@ -86,11 +100,12 @@ rhit.WhiteAuthManager = class {
 			});
 		});
 	}
-	//change it so if both users are signed in, it signs both users out at once.
+
 	signOut() {
 		firebase.auth().signOut().catch(function (error) {
 			console.log("Sign out error");
 		});
+		console.log("white signed out = " + !this.isWhiteSignedIn);
 	}
 
 	get isWhiteSignedIn() {
@@ -107,14 +122,14 @@ rhit.BlackAuthManager = class {
 	constructor() {
 		this._blackUser = null;
 	}
-	//Need a function for every user
+
 	beginListening(changeListener) {
 		firebase.auth().onAuthStateChanged((blackUser) => {
 			this._blackUser = blackUser;
 			changeListener();
 		});
 	}
-	//TODO: change it so there's a sign in for White and a sign in for black
+
 	signIn() {
 		console.log("Sign in using rosefire");
 		Rosefire.signIn("41b7b93b-3c9d-4f2c-83cb-e57e90cba145", (err, rfUser) => {
@@ -134,11 +149,12 @@ rhit.BlackAuthManager = class {
 			});
 		});
 	}
-	//change it so if both users are signed in, it signs both users out at once.
+
 	signOut() {
 		firebase.auth().signOut().catch(function (error) {
 			console.log("Sign out error");
 		});
+		console.log("black signed out = " + !this.isBlackSignedIn);
 	}
 
 	get isBlackSignedIn() {
@@ -186,7 +202,6 @@ rhit.initializePage = function () {
 		
 		
 		
-		rhit.whiteAuthManager = new rhit.WhiteAuthManager();
 		rhit.whiteAuthManager.signOut();
 		rhit.whiteAuthManager.beginListening(() => {
 			isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
@@ -203,7 +218,7 @@ rhit.initializePage = function () {
 
 	if (document.querySelector("#blackLoginPage")) {
 		
-		rhit.blackAuthManager = new rhit.BlackAuthManager();
+		
 		rhit.blackAuthManager.signOut();
 		rhit.blackAuthManager.beginListening(() => {
 			isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
@@ -216,27 +231,27 @@ rhit.initializePage = function () {
 		new rhit.blackLoginPageController();
 	}
 	if(document.querySelector("#gameBoardPage")){
-		console.log(`Is signed in: ${rhit.whiteAuthManager.uidWhite}`);
+		new rhit.gameBoardPageController();
+		console.log(rhit.whiteAuthManager);
+		console.log(`Signed in as: ${rhit.whiteAuthManager.uidWhite} and ${rhit.blackAuthManager.uidBlack}`);
 	}
-	// if(document.querySelector("#leaderboardPage")){
-	// 	new rhit.indexPageController();
-	// }
+
+	if(document.querySelector("#leaderboardPage")){
+		new rhit.leaderboardPageController();
+	}
 }
 
 /* Main */
 /** function and class syntax examples */
 rhit.main = function () {
 	console.log("Ready");
-	var isWhiteSignedIn;
-	var isBlackSignedIn;
+
+
+	rhit.whiteAuthManager = new rhit.WhiteAuthManager();
+	rhit.blackAuthManager = new rhit.BlackAuthManager();
 
 
 	rhit.initializePage();
-
-
-	
-
-
 
 
 };
