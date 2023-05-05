@@ -77,6 +77,7 @@ rhit.WhiteAuthManager = class {
 	beginListening(changeListener) {
 		firebase.auth().onAuthStateChanged((whiteUser) => {
 			this._whiteUser = whiteUser;
+			console.log("this.whiteuser" + this._whiteUser)
 			changeListener();
 		});
 	}
@@ -207,6 +208,8 @@ rhit.initializePage = function () {
 			isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
 			if (isWhiteSignedIn) {
 				console.log("user " + rhit.whiteAuthManager.uidWhite);
+				localStorage.clear();
+				localStorage.setItem("whiteUserName", rhit.whiteAuthManager.uidWhite)
 				window.location.href = "/blackLogin.html";
 			}
 		});
@@ -224,6 +227,7 @@ rhit.initializePage = function () {
 			isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
 			if (isBlackSignedIn) {
 				console.log("user " + rhit.blackAuthManager.uidBlack);
+				localStorage.setItem("blackUserName", rhit.blackAuthManager.uidBlack);
 				window.location.href = "/gameBoard.html"
 			}
 		});
@@ -232,8 +236,7 @@ rhit.initializePage = function () {
 	}
 	if(document.querySelector("#gameBoardPage")){
 		new rhit.gameBoardPageController();
-		console.log(rhit.whiteAuthManager);
-		console.log(`Signed in as: ${rhit.whiteAuthManager.uidWhite} and ${rhit.blackAuthManager.uidBlack}`);
+		console.log(`Signed in as: ${localStorage.getItem("whiteUserName")} and ${localStorage.getItem("blackUserName")}`);
 	}
 
 	if(document.querySelector("#leaderboardPage")){

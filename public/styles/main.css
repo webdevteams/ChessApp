@@ -85,7 +85,7 @@ a:active {
     .chess-board td {
         border: 2px solid;
         width: 2.5em;
-        height: 2.5em;
+        height: 2.5     em;
     }
 }
 
