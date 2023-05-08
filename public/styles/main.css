@@ -120,3 +120,8 @@ a:active {
 .chess-board .dark {
     background: #005099;
 }
+
+td img{
+    display: block;
+    width: 100%;
+}
