@@ -66,46 +66,46 @@ rhit.gameBoardPageController = class {
 	updateView() {
 		for(let i = 0; i < 7; i++) {
 			for(let j = 0; j < 7; j++) {
-				spaceID = i.toString() + j.toString();
+				let spaceID = i.toString() + j.toString();
 				switch(this.game.board[i][j]) {
 					case rhit.Game.Piece.NONE:
-						document.querySelector("#" + spaceID + " > img").src = "";
+						document.getElementById(`${spaceID}`).src = "";
 						break;
 					case rhit.Game.Piece.WHITE_ROOK:
-						document.querySelector("#" + spaceID + " > img").src = "images/RookWhite.png";
+						document.getElementById(`${spaceID}`).src = "images/RookWhite.png";
 						break;
 					case rhit.Game.Piece.BLACK_ROOK:
-						document.querySelector("#" + spaceID + " > img").src = "images/RookBlack.png";
+						document.getElementById(`${spaceID}`).src = "images/RookBlack.png";
 						break;
 					case rhit.Game.Piece.WHITE_KNIGHT:
-						document.querySelector("#" + spaceID + " > img").src = "images/KnightWhite.png";
+						document.getElementById(`${spaceID}`).src = "images/KnightWhite.png";
 						break;
 					case rhit.Game.Piece.BLACK_KNIGHT:
-						document.querySelector("#" + spaceID + " > img").src = "images/KnightBlack.png";
+						document.getElementById(`${spaceID}`).src = "images/KnightBlack.png";
 						break;
 					case rhit.Game.Piece.WHITE_BISHOP:
-						document.querySelector("#" + spaceID + " > img").src = "images/BishopWhite.png";
+						document.getElementById(`${spaceID}`).src = "images/BishopWhite.png";
 						break;
 					case rhit.Game.Piece.BLACK_BISHOP:
-						document.querySelector("#" + spaceID + " > img").src = "images/BishopBlack.png";
+						document.getElementById(`${spaceID}`).src = "images/BishopBlack.png";
 						break;
 					case rhit.Game.Piece.WHITE_QUEEN:
-						document.querySelector("#" + spaceID + " > img").src = "images/QueenWhite.png";
+						document.getElementById(`${spaceID}`).src = "images/QueenWhite.png";
 						break;
 					case rhit.Game.Piece.BLACK_QUEEN:
-						document.querySelector("#" + spaceID + " > img").src = "images/QueenBlack.png";
+						document.getElementById(`${spaceID}`).src = "images/QueenBlack.png";
 						break;
 					case rhit.Game.Piece.WHITE_KING:
-						document.querySelector("#" + spaceID + " > img").src = "images/KingWhite.png";
+						document.getElementById(`${spaceID}`).src = "images/KingWhite.png";
 						break;
 					case rhit.Game.Piece.BLACK_KING:
-						document.querySelector("#" + spaceID + " > img").src = "images/KingBlack.png";
+						document.getElementById(`${spaceID}`).src = "images/KingBlack.png";
 						break;
 					case rhit.Game.Piece.WHITE_PAWN:
-						document.querySelector("#" + spaceID + " > img").src = "images/PawnWhite.png";
+						document.getElementById(`${spaceID}`).src = "images/PawnWhite.png";
 						break;
 					case rhit.Game.Piece.BLACK_PAWN:
-						document.querySelector("#" + spaceID + " > img").src = "images/PawnBlack.png";
+						document.getElementById(`${spaceID}`).src = "images/PawnBlack.png";
 						break;
 				}
 			}
@@ -248,8 +248,9 @@ rhit.Game = class {
 
 	constructor() {
 		this.state = rhit.Game.State.BLACK_TURN;
-		this.board = [8][8];
+		this.board = new Array(8);
 		for(let i = 0; i < 7; i++) {
+			this.board[i] = new Array(8);
 			for(let j = 0; j < 7; j++) {
 				this.board[i][j] = rhit.Game.Piece.NONE;
 			}
