@@ -54,6 +54,7 @@ rhit.blackLoginPageController = class {
 rhit.gameBoardPageController = class {
 	constructor() {
 		this.game = new rhit.Game();
+		this.game.initializeGame();
 
 		document.querySelector("#menuSignOut").onclick = (event) => {
 			rhit.whiteAuthManager.signOut();
@@ -249,9 +250,9 @@ rhit.Game = class {
 	constructor() {
 		this.state = rhit.Game.State.BLACK_TURN;
 		this.board = new Array(8);
-		for(let i = 0; i < 7; i++) {
+		for(let i = 0; i < 8; i++) {
 			this.board[i] = new Array(8);
-			for(let j = 0; j < 7; j++) {
+			for(let j = 0; j < 8; j++) {
 				this.board[i][j] = rhit.Game.Piece.NONE;
 			}
 		}
@@ -279,8 +280,9 @@ rhit.Game = class {
 		this.board[6][0] = rhit.Game.Piece.WHITE_KNIGHT;
 		this.board[7][0] = rhit.Game.Piece.WHITE_ROOK;
 		for(let j = 0; j < 7; j++) {
-			this.board[j][0] = rhit.Game.Piece.WHITE_PAWN;
+			this.board[j][1] = rhit.Game.Piece.WHITE_PAWN;
 		}
+		console.log(this.board);
 	}
 
 	placePieceAtLocation(piece, row, col) {
