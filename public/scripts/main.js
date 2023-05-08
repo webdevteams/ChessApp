@@ -27,11 +27,11 @@ rhit.loginPageController = class {
 
 rhit.indexPageController = class {
 	constructor() {
-		
+
 		document.querySelector("#loginButton").onclick = (event) => {
 			window.location.href = "/whiteLogin.html";
 		};
-		
+
 	}
 }
 
@@ -61,14 +61,36 @@ rhit.gameBoardPageController = class {
 			rhit.blackAuthManager.signOut();
 		};
 
+		const spaces = document.querySelectorAll("td img");
+		for (const space of spaces) {
+			space.onclick = (event) => {
+				const i = parseInt(space.id.substring(0, 1));
+				const j = parseInt(space.id.substring(1));
+
+				let locations = new Array(1)
+				for (let x = 0; x < 8; x++) {
+					locations[x] = new Array(2);
+				}
+
+				locations = this.game.getMoves(this.game.getPieceAtLocation(i, j), i, j, locations);
+				console.log(locations);
+				for (let x = 0; x < locations.length; x++) {
+					if (locations[x] !== empty) {
+						console.log(locations[x]);
+						//onclick and also fix empty values
+					}
+				}
+			}
+		}
+
 		this.updateView();
 	}
 
 	updateView() {
-		for(let i = 0; i < 8; i++) {
-			for(let j = 0; j < 8; j++) {
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
 				let spaceID = i.toString() + j.toString();
-				switch(this.game.board[i][j]) {
+				switch (this.game.board[i][j]) {
 					case rhit.Game.Piece.NONE:
 						document.getElementById(`${spaceID}`).src = "";
 						break;
@@ -250,9 +272,9 @@ rhit.Game = class {
 	constructor() {
 		this.state = rhit.Game.State.BLACK_TURN;
 		this.board = new Array(8);
-		for(let i = 0; i < 8; i++) {
+		for (let i = 0; i < 8; i++) {
 			this.board[i] = new Array(8);
-			for(let j = 0; j < 8; j++) {
+			for (let j = 0; j < 8; j++) {
 				this.board[i][j] = rhit.Game.Piece.NONE;
 			}
 		}
@@ -267,7 +289,7 @@ rhit.Game = class {
 		this.board[5][7] = rhit.Game.Piece.BLACK_BISHOP;
 		this.board[6][7] = rhit.Game.Piece.BLACK_KNIGHT;
 		this.board[7][7] = rhit.Game.Piece.BLACK_ROOK;
-		for(let i = 0; i < 8; i++) {
+		for (let i = 0; i < 8; i++) {
 			this.board[i][6] = rhit.Game.Piece.BLACK_PAWN;
 		}
 
@@ -279,26 +301,26 @@ rhit.Game = class {
 		this.board[5][0] = rhit.Game.Piece.WHITE_BISHOP;
 		this.board[6][0] = rhit.Game.Piece.WHITE_KNIGHT;
 		this.board[7][0] = rhit.Game.Piece.WHITE_ROOK;
-		for(let j = 0; j < 8; j++) {
+		for (let j = 0; j < 8; j++) {
 			this.board[j][1] = rhit.Game.Piece.WHITE_PAWN;
 		}
 		console.log(this.board);
 	}
 
 	placePieceAtLocation(piece, row, col) {
-		if(this.state == rhit.Game.State.BLACK_WIN ||
+		if (this.state == rhit.Game.State.BLACK_WIN ||
 			this.state == rhit.Game.State.WHITE_WIN ||
 			this.state == rhit.Game.State.TIE) {
-				return;
+			return;
 		}
 
-		if(this.board[row][col] == rhit.Game.Piece.NONE) {
+		if (this.board[row][col] == rhit.Game.Piece.NONE) {
 			this.board[row][col] = piece;
 			return;
 		}
 
-		if(this.state == rhit.Game.State.BLACK_TURN) {
-			if(this.board[row][col].includes("Black")) {
+		if (this.state == rhit.Game.State.BLACK_TURN) {
+			if (this.board[row][col].includes("Black")) {
 				return;
 			} else { //Insert capture function later
 				this.board[row][col] = piece;
@@ -306,13 +328,121 @@ rhit.Game = class {
 			}
 		}
 
-		if(this.state == rhit.Game.State.WHITE_TURN) {
-			if(this.board[row][col].includes("White")) {
+		if (this.state == rhit.Game.State.WHITE_TURN) {
+			if (this.board[row][col].includes("White")) {
 				return;
 			} else { //Insert capture function later
 				this.board[row][col] = piece;
 				return;
 			}
+		}
+	}
+
+	getMoves(piece, i, j, locations) {
+
+
+		if (piece == rhit.Game.Piece.BLACK_PAWN) {
+			locations = this.getBlackPawnMoves(i, j, locations);
+			return locations;
+		}
+		if (piece == rhit.Game.Piece.WHITE_PAWN) {
+			locations = this.getWhitePawnMoves(i, j, locations);
+			return locations;
+		}
+		if (piece.includes("king")) {
+			locations = this.getKingMoves(i, j, locations);
+		}
+		if (piece.includes("queen")) {
+			locations = this.getQueenMoves(i, j, locations);
+		}
+		if (piece.includes("bishop")) {
+			locations = this.getBishopMoves(i, j, locations);
+		}
+		if (piece.includes("knight")) {
+			locations = this.getKnightMoves(i, j, locations);
+		}
+		if (piece.includes("rook")) {
+			locations = this.getRookMoves(i, j, locations);
+		}
+	}
+
+	getBlackPawnMoves(i, j, locations) {
+		let locationsi = 0;
+
+		let possiblei = i - 1; let possiblej = j - 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[locationsi][0] = possiblei;
+			locations[locationsi][1] = possiblej;
+			locationsi++;
+		}
+
+		possiblei = i + 1; possiblej = j - 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[locationsi][0] = possiblei;
+			locations[locationsi][1] = possiblej;
+			locationsi++;
+		}
+
+		possiblei = i; possiblej = j - 1;
+		if (i >= 0 && i <= 7 && j >= 0 && j <= 7 && this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+			locations[locationsi][0] = possiblei;
+			locations[locationsi][1] = possiblej;
+			locationsi++;
+		}
+
+		return locations;
+	}
+
+	getWhitePawnMoves(i, j, locations) {
+		let locationsi = 0;
+
+		let possiblei = i - 1; let possiblej = j + 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[locationsi][0] = possiblei;
+			locations[locationsi][1] = possiblej;
+			locationsi++;
+		}
+
+		possiblei = i + 1; possiblej = j + 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[locationsi][0] = possiblei;
+			locations[locationsi][1] = possiblej;
+			locationsi++;
+		}
+
+		possiblei = i; possiblej = j + 1;
+		if (i >= 0 && i <= 7 && j >= 0 && j <= 7 && this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+			locations[locationsi][0] = possiblei;
+			locations[locationsi][1] = possiblej;
+			locationsi++;
+		}
+
+		return locations;
+	}
+
+	getKingMoves(i, j, locations) {
+
+	}
+
+	getQueenMoves(i, j, locations) {
+
+	}
+
+	getBishopMoves(i, j, locations) {
+
+	}
+
+	getKnightMoves(i, j, locations) {
+
+	}
+
+	getRookMoves(i, j, locations) {
+
+	}
+
+	checkValid(i, j) {
+		if (i >= 0 && i <= 7 && j >= 0 && j <= 7) {
+			return true;
 		}
 	}
 
@@ -358,9 +488,9 @@ rhit.initializePage = function () {
 		new rhit.indexPageController();
 	}
 	if (document.querySelector("#whiteLoginPage")) {
-		
-		
-		
+
+
+
 		rhit.whiteAuthManager.signOut();
 		rhit.whiteAuthManager.beginListening(() => {
 			isWhiteSignedIn = rhit.whiteAuthManager.isWhiteSignedIn;
@@ -378,8 +508,8 @@ rhit.initializePage = function () {
 	}
 
 	if (document.querySelector("#blackLoginPage")) {
-		
-		
+
+
 		rhit.blackAuthManager.signOut();
 		rhit.blackAuthManager.beginListening(() => {
 			isBlackSignedIn = rhit.blackAuthManager.isBlackSignedIn;
@@ -392,12 +522,12 @@ rhit.initializePage = function () {
 
 		new rhit.blackLoginPageController();
 	}
-	if(document.querySelector("#gameBoardPage")){
+	if (document.querySelector("#gameBoardPage")) {
 		new rhit.gameBoardPageController();
 		console.log(`Signed in as: ${localStorage.getItem("whiteUserName")} and ${localStorage.getItem("blackUserName")}`);
 	}
 
-	if(document.querySelector("#leaderboardPage")){
+	if (document.querySelector("#leaderboardPage")) {
 		new rhit.leaderboardPageController();
 	}
 }
