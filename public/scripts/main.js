@@ -65,8 +65,8 @@ rhit.gameBoardPageController = class {
 	}
 
 	updateView() {
-		for(let i = 0; i < 7; i++) {
-			for(let j = 0; j < 7; j++) {
+		for(let i = 0; i < 8; i++) {
+			for(let j = 0; j < 8; j++) {
 				let spaceID = i.toString() + j.toString();
 				switch(this.game.board[i][j]) {
 					case rhit.Game.Piece.NONE:
