@@ -267,7 +267,7 @@ rhit.Game = class {
 		this.board[5][7] = rhit.Game.Piece.BLACK_BISHOP;
 		this.board[6][7] = rhit.Game.Piece.BLACK_KNIGHT;
 		this.board[7][7] = rhit.Game.Piece.BLACK_ROOK;
-		for(let i = 0; i < 7; i++) {
+		for(let i = 0; i < 8; i++) {
 			this.board[i][6] = rhit.Game.Piece.BLACK_PAWN;
 		}
 
@@ -279,7 +279,7 @@ rhit.Game = class {
 		this.board[5][0] = rhit.Game.Piece.WHITE_BISHOP;
 		this.board[6][0] = rhit.Game.Piece.WHITE_KNIGHT;
 		this.board[7][0] = rhit.Game.Piece.WHITE_ROOK;
-		for(let j = 0; j < 7; j++) {
+		for(let j = 0; j < 8; j++) {
 			this.board[j][1] = rhit.Game.Piece.WHITE_PAWN;
 		}
 		console.log(this.board);
