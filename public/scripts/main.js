@@ -67,17 +67,20 @@ rhit.gameBoardPageController = class {
 				const i = parseInt(space.id.substring(0, 1));
 				const j = parseInt(space.id.substring(1));
 
-				let locations = new Array(1)
-				for (let x = 0; x < 8; x++) {
-					locations[x] = new Array(2);
-				}
+				let locations = new Array(1);
+				const piece = this.game.getPieceAtLocation(i, j);
 
-				locations = this.game.getMoves(this.game.getPieceAtLocation(i, j), i, j, locations);
+				locations = this.game.getMoves(piece, i, j, locations);
 				console.log(locations);
+
 				for (let x = 0; x < locations.length; x++) {
-					if (locations[x] !== empty) {
-						console.log(locations[x]);
-						//onclick and also fix empty values
+					document.getElementById(locations[x]).onclick = (event) => {
+						//fix this id thing
+						console.log("clicked");
+						this.game.board[i][j] = this.game.Piece.NONE;
+						const newi = parseInt(locations[x].substring(0, 1));
+						const newj = parseInt(locations[x].substring(1));
+						this.game.board[newi][newj] = piece;
 					}
 				}
 			}
@@ -367,27 +370,25 @@ rhit.Game = class {
 	}
 
 	getBlackPawnMoves(i, j, locations) {
-		let locationsi = 0;
+		let loci = 0;
 
 		let possiblei = i - 1; let possiblej = j - 1;
 		if (this.checkValid(possiblei, possiblej)) {
-			locations[locationsi][0] = possiblei;
-			locations[locationsi][1] = possiblej;
-			locationsi++;
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
 		}
 
 		possiblei = i + 1; possiblej = j - 1;
 		if (this.checkValid(possiblei, possiblej)) {
-			locations[locationsi][0] = possiblei;
-			locations[locationsi][1] = possiblej;
-			locationsi++;
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
 		}
 
 		possiblei = i; possiblej = j - 1;
-		if (i >= 0 && i <= 7 && j >= 0 && j <= 7 && this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
-			locations[locationsi][0] = possiblei;
-			locations[locationsi][1] = possiblej;
-			locationsi++;
+		if (possiblei >= 0 && possiblei <= 7 && possiblej >= 0 && possiblej <= 7
+			&& this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
 		}
 
 		return locations;
