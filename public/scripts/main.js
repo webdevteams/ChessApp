@@ -86,6 +86,15 @@ rhit.gameBoardPageController = class {
 							const newj = parseInt(locations[x].substring(1));
 							this.game.board[newi][newj] = piece;
 							this.updateView();
+							if (this.game.getState() == rhit.Game.State.BLACK_TURN) {
+								this.game.state = rhit.Game.State.WHITE_TURN;
+								console.log("Black turn end");
+							}
+							else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
+								this.game.state = rhit.Game.State.BLACK_TURN;
+								console.log("White turn end");
+							}
+
 							this.pieceListeners();
 						}
 					}
