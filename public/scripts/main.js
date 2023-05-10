@@ -395,6 +395,7 @@ rhit.Game = class {
 		}
 		if (piece.includes("king")) {
 			locations = this.getKingMoves(i, j, locations);
+			return locations;
 		}
 		if (piece.includes("queen")) {
 			locations = this.getQueenMoves(i, j, locations);
@@ -414,13 +415,13 @@ rhit.Game = class {
 		let loci = 0;
 
 		let possiblei = i - 1; let possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej)) {
+		if (this.checkValid(possiblei, possiblej) && this.board[i][j] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
 		possiblei = i + 1; possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej)) {
+		if (this.checkValid(possiblei, possiblej) && this.board[i][j] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -481,7 +482,7 @@ rhit.Game = class {
 	}
 
 	checkValid(i, j) {
-		if ((i >= 0 && i <= 7 && j >= 0 && j <= 7) && this.board[i][j] == rhit.Game.Piece.NONE) {
+		if ((i >= 0 && i <= 7 && j >= 0 && j <= 7)) {
 			return true;
 		}
 	}
