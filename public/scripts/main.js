@@ -69,25 +69,25 @@ rhit.gameBoardPageController = class {
 	pieceListeners(){
 		const spaces = document.querySelectorAll("td img");
 		for (const space of spaces) {
-			space.onclick = (event) => {
-				const i = parseInt(space.id.substring(0, 1));
-				const j = parseInt(space.id.substring(1));
-
-				let locations = new Array(1);
-				const piece = this.game.getPieceAtLocation(i, j);
-
-				locations = this.game.getMoves(piece, i, j, locations);
-				console.log(locations);
-				
-				for (let x = 0; x < locations.length; x++) {
-					document.getElementById(locations[x]).onclick = (event) => {
-						console.log("clicked");
-						this.game.board[i][j] = rhit.Game.Piece.NONE;
-						const newi = parseInt(locations[x].substring(0, 1));
-						const newj = parseInt(locations[x].substring(1));
-						this.game.board[newi][newj] = piece;
-						this.updateView();
-						this.pieceListeners();
+			const i = parseInt(space.id.substring(0, 1));
+			const j = parseInt(space.id.substring(1));
+			const piece = this.game.getPieceAtLocation(i, j);
+			if (piece != rhit.Game.Piece.NONE) {
+				space.onclick = (event) => {
+					let locations = new Array(1);
+					locations = this.game.getMoves(piece, i, j, locations);
+					console.log(locations);
+					
+					for (let x = 0; x < locations.length; x++) {
+						document.getElementById(locations[x]).onclick = (event) => {
+							console.log("clicked");
+							this.game.board[i][j] = rhit.Game.Piece.NONE;
+							const newi = parseInt(locations[x].substring(0, 1));
+							const newj = parseInt(locations[x].substring(1));
+							this.game.board[newi][newj] = piece;
+							this.updateView();
+							this.pieceListeners();
+						}
 					}
 				}
 			}
