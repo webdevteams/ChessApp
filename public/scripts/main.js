@@ -61,25 +61,31 @@ rhit.gameBoardPageController = class {
 			rhit.blackAuthManager.signOut();
 		};
 
-		
+
 		this.pieceListeners();
 		this.updateView();
 	}
 
-	pieceListeners(){
+	pieceListeners() {
 		const spaces = document.querySelectorAll("td img");
 		for (const space of spaces) {
 			const i = parseInt(space.id.substring(0, 1));
 			const j = parseInt(space.id.substring(1));
 			const piece = this.game.getPieceAtLocation(i, j);
 			const state = this.game.getState();
-			if ((state == rhit.Game.State.WHITE_TURN && piece.includes("White") || (state == rhit.Game.State.BLACK_TURN && piece.includes("Black")))) {
-				if (piece != rhit.Game.Piece.NONE) {
-					space.onclick = (event) => {
-						let locations = new Array(1);
-						locations = this.game.getMoves(piece, i, j, locations);
-						console.log(locations);
-						
+
+			if ((piece != rhit.Game.Piece.NONE) && ((state == rhit.Game.State.WHITE_TURN && piece.includes("White")) || (state == rhit.Game.State.BLACK_TURN && piece.includes("Black")))) {
+
+				console.log("added");
+				space.onclick = (event) => {
+					let locations = new Array(1);
+					locations = this.game.getMoves(piece, i, j, locations);
+					console.log(locations);
+					if (locations.length == 1 && locations[0] == undefined) {
+						console.log("cannot move piece");
+					}
+					else {
+
 						for (let x = 0; x < locations.length; x++) {
 							document.getElementById(locations[x]).onclick = (event) => {
 								console.log("clicked");
@@ -96,21 +102,31 @@ rhit.gameBoardPageController = class {
 								} else {
 									piece_moved = true;
 								}
-								if (this.game.getState() == rhit.Game.State.BLACK_TURN && piece_moved == true) {
+								if (this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									this.game.state = rhit.Game.State.WHITE_TURN;
-									console.log("Black turn end");
 								}
-								else if (this.game.getState() == rhit.Game.State.WHITE_TURN && piece_moved == true) {
+								else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
 									this.game.state = rhit.Game.State.BLACK_TURN;
-									console.log("White turn end");
 								}
-	
+
+
+
+								console.log(this.game.state);
+
 								this.pieceListeners();
 							}
 						}
 					}
 				}
 			}
+			else {
+				space.onclick = (event) => {
+
+				}
+				console.log("removed");
+			}
+
+
 		}
 	}
 
@@ -465,7 +481,7 @@ rhit.Game = class {
 	}
 
 	checkValid(i, j) {
-		if (i >= 0 && i <= 7 && j >= 0 && j <= 7) {
+		if ((i >= 0 && i <= 7 && j >= 0 && j <= 7) && this.board[i][j] == rhit.Game.Piece.NONE) {
 			return true;
 		}
 	}
