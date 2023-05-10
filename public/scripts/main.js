@@ -72,30 +72,41 @@ rhit.gameBoardPageController = class {
 			const i = parseInt(space.id.substring(0, 1));
 			const j = parseInt(space.id.substring(1));
 			const piece = this.game.getPieceAtLocation(i, j);
-			if (piece != rhit.Game.Piece.NONE) {
-				space.onclick = (event) => {
-					let locations = new Array(1);
-					locations = this.game.getMoves(piece, i, j, locations);
-					console.log(locations);
-					
-					for (let x = 0; x < locations.length; x++) {
-						document.getElementById(locations[x]).onclick = (event) => {
-							console.log("clicked");
-							this.game.board[i][j] = rhit.Game.Piece.NONE;
-							const newi = parseInt(locations[x].substring(0, 1));
-							const newj = parseInt(locations[x].substring(1));
-							this.game.board[newi][newj] = piece;
-							this.updateView();
-							if (this.game.getState() == rhit.Game.State.BLACK_TURN) {
-								this.game.state = rhit.Game.State.WHITE_TURN;
-								console.log("Black turn end");
+			const state = this.game.getState();
+			if ((state == rhit.Game.State.WHITE_TURN && piece.includes("White") || (state == rhit.Game.State.BLACK_TURN && piece.includes("Black")))) {
+				if (piece != rhit.Game.Piece.NONE) {
+					space.onclick = (event) => {
+						let locations = new Array(1);
+						locations = this.game.getMoves(piece, i, j, locations);
+						console.log(locations);
+						
+						for (let x = 0; x < locations.length; x++) {
+							document.getElementById(locations[x]).onclick = (event) => {
+								console.log("clicked");
+								this.game.board[i][j] = rhit.Game.Piece.NONE;
+								const oldi = i;
+								const oldj = j
+								const newi = parseInt(locations[x].substring(0, 1));
+								const newj = parseInt(locations[x].substring(1));
+								this.game.board[newi][newj] = piece;
+								this.updateView();
+								let piece_moved = true;
+								if (oldi == newi && oldj == newj) {
+									piece_moved = false;
+								} else {
+									piece_moved = true;
+								}
+								if (this.game.getState() == rhit.Game.State.BLACK_TURN && piece_moved == true) {
+									this.game.state = rhit.Game.State.WHITE_TURN;
+									console.log("Black turn end");
+								}
+								else if (this.game.getState() == rhit.Game.State.WHITE_TURN && piece_moved == true) {
+									this.game.state = rhit.Game.State.BLACK_TURN;
+									console.log("White turn end");
+								}
+	
+								this.pieceListeners();
 							}
-							else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
-								this.game.state = rhit.Game.State.BLACK_TURN;
-								console.log("White turn end");
-							}
-
-							this.pieceListeners();
 						}
 					}
 				}
