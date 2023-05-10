@@ -72,15 +72,15 @@ rhit.gameBoardPageController = class {
 
 				locations = this.game.getMoves(piece, i, j, locations);
 				console.log(locations);
-
+				
 				for (let x = 0; x < locations.length; x++) {
 					document.getElementById(locations[x]).onclick = (event) => {
-						//fix this id thing
 						console.log("clicked");
-						this.game.board[i][j] = this.game.Piece.NONE;
+						this.game.board[i][j] = rhit.Game.Piece.NONE;
 						const newi = parseInt(locations[x].substring(0, 1));
 						const newj = parseInt(locations[x].substring(1));
 						this.game.board[newi][newj] = piece;
+						this.updateView();
 					}
 				}
 			}
@@ -95,7 +95,7 @@ rhit.gameBoardPageController = class {
 				let spaceID = i.toString() + j.toString();
 				switch (this.game.board[i][j]) {
 					case rhit.Game.Piece.NONE:
-						document.getElementById(`${spaceID}`).src = "";
+						document.getElementById(`${spaceID}`).src = "images/transparent.png";
 						break;
 					case rhit.Game.Piece.WHITE_ROOK:
 						document.getElementById(`${spaceID}`).src = "images/RookWhite.png";
@@ -395,27 +395,25 @@ rhit.Game = class {
 	}
 
 	getWhitePawnMoves(i, j, locations) {
-		let locationsi = 0;
+		let loci = 0;
 
 		let possiblei = i - 1; let possiblej = j + 1;
 		if (this.checkValid(possiblei, possiblej)) {
-			locations[locationsi][0] = possiblei;
-			locations[locationsi][1] = possiblej;
-			locationsi++;
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
 		}
 
 		possiblei = i + 1; possiblej = j + 1;
 		if (this.checkValid(possiblei, possiblej)) {
-			locations[locationsi][0] = possiblei;
-			locations[locationsi][1] = possiblej;
-			locationsi++;
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
 		}
 
 		possiblei = i; possiblej = j + 1;
-		if (i >= 0 && i <= 7 && j >= 0 && j <= 7 && this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
-			locations[locationsi][0] = possiblei;
-			locations[locationsi][1] = possiblej;
-			locationsi++;
+		if (possiblei >= 0 && possiblei <= 7 && possiblej >= 0 && possiblej <= 7
+			&& this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
 		}
 
 		return locations;
