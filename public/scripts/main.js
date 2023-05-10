@@ -90,26 +90,16 @@ rhit.gameBoardPageController = class {
 							document.getElementById(locations[x]).onclick = (event) => {
 								console.log("clicked");
 								this.game.board[i][j] = rhit.Game.Piece.NONE;
-								const oldi = i;
-								const oldj = j
 								const newi = parseInt(locations[x].substring(0, 1));
 								const newj = parseInt(locations[x].substring(1));
 								this.game.board[newi][newj] = piece;
 								this.updateView();
-								let piece_moved = true;
-								if (oldi == newi && oldj == newj) {
-									piece_moved = false;
-								} else {
-									piece_moved = true;
-								}
 								if (this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									this.game.state = rhit.Game.State.WHITE_TURN;
 								}
 								else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
 									this.game.state = rhit.Game.State.BLACK_TURN;
 								}
-
-
 
 								console.log(this.game.state);
 
