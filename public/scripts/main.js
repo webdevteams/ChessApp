@@ -61,6 +61,12 @@ rhit.gameBoardPageController = class {
 			rhit.blackAuthManager.signOut();
 		};
 
+		
+		this.pieceListeners();
+		this.updateView();
+	}
+
+	pieceListeners(){
 		const spaces = document.querySelectorAll("td img");
 		for (const space of spaces) {
 			space.onclick = (event) => {
@@ -81,12 +87,11 @@ rhit.gameBoardPageController = class {
 						const newj = parseInt(locations[x].substring(1));
 						this.game.board[newi][newj] = piece;
 						this.updateView();
+						this.pieceListeners();
 					}
 				}
 			}
 		}
-
-		this.updateView();
 	}
 
 	updateView() {
