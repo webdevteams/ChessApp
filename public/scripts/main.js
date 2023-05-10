@@ -392,6 +392,7 @@ rhit.Game = class {
 		}
 		if (piece.includes("bishop")) {
 			locations = this.getBishopMoves(i, j, locations);
+			return locations;
 		}
 		if (piece.includes("knight")) {
 			locations = this.getKnightMoves(i, j, locations);
@@ -450,6 +451,14 @@ rhit.Game = class {
 
 		return locations;
 	}
+/*
+	Pawns can only move diagonally and attack forwards
+	Knights move the same
+	Swap movement of king and queen
+	Bishops can’t move on sundays
+	Rooks can only move a maximum of 5 spaces at once
+	The queen, if removed, eliminates all pieces in a 3x3 radius, changes colors of pieces around it?
+*/
 
 	getKingMoves(i, j, locations) {
 
@@ -460,7 +469,48 @@ rhit.Game = class {
 	}
 
 	getBishopMoves(i, j, locations) {
-
+		let loci = 0;
+		//diagonal upperleft i--, j++
+		let possiblei = i;
+		let possiblej = j;
+		for (possiblei = i; possiblei >= 0; possiblei--) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej++;
+		}
+		//diagonal upperright i++, j++
+		possiblei = i;
+		possiblej = j;
+		for (possiblei = i; possiblei < 8; possiblei++) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej++;
+		}
+		//diagonal lowerleft i--, j--
+		possiblei = i;
+		possiblej = j;
+		for (possiblei = i; possiblei >= 0; possiblei--) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej--;
+		}
+		//diagonal lowerright, i++, j--
+		possiblei = i;
+		possiblej = j;
+		for (possiblei = i; possiblei < 8; possiblei++) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej--;
+		}
+		return locations;
 	}
 
 	getKnightMoves(i, j, locations) {
