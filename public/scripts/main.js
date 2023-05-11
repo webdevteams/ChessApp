@@ -389,6 +389,7 @@ rhit.Game = class {
 		}
 		if (piece.includes("queen")) {
 			locations = this.getQueenMoves(i, j, locations);
+			return locations;
 		}
 		if (piece.includes("bishop")) {
 			locations = this.getBishopMoves(i, j, locations);
@@ -396,9 +397,11 @@ rhit.Game = class {
 		}
 		if (piece.includes("knight")) {
 			locations = this.getKnightMoves(i, j, locations);
+			return locations;
 		}
 		if (piece.includes("rook")) {
 			locations = this.getRookMoves(i, j, locations);
+			return locations;
 		}
 	}
 
@@ -461,11 +464,111 @@ rhit.Game = class {
 */
 
 	getKingMoves(i, j, locations) {
+		let loci = 0;
+		//diagonal upperleft i--, j++
+		let possiblei = i;
+		let possiblej = j;
+		for (possiblei = i; possiblei >= 0; possiblei--) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej++;
+		}
+		//diagonal upperright i++, j++
+		possiblei = i;
+		possiblej = j;
+		for (possiblei = i; possiblei < 8; possiblei++) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej++;
+		}
+		//diagonal lowerleft i--, j--
+		possiblei = i;
+		possiblej = j;
+		for (possiblei = i; possiblei >= 0; possiblei--) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej--;
+		}
+		//diagonal lowerright, i++, j--
+		possiblei = i;
+		possiblej = j;
+		for (possiblei = i; possiblei < 8; possiblei++) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej--;
+		}
+		//add the straight line movement after rook is fixed
 
+		return locations;
 	}
 
 	getQueenMoves(i, j, locations) {
-
+		let loci = 0;
+		//upper left i--, j++
+		let possiblei = i - 1;
+		let possiblej = j + 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		//up j++
+		possiblei = i;
+		possiblej = j + 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		//upper right i++, j++
+		possiblei = i + 1;
+		possiblej = j + 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		//right i++
+		possiblei = i + 1;
+		possiblej = j;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		//lower right i++, j--
+		possiblei = i + 1;
+		possiblej = j - 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		//down j--
+		possiblei = i;
+		possiblej = j - 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		//lower left i--, j--
+		possiblei = i - 1;
+		possiblej = j - 1;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		//left i--
+		possiblei = i - 1;
+		possiblej = j;
+		if (this.checkValid(possiblei, possiblej)) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		return locations;
 	}
 
 	getBishopMoves(i, j, locations) {
@@ -518,7 +621,44 @@ rhit.Game = class {
 	}
 
 	getRookMoves(i, j, locations) {
-
+		let loci = 0;
+		//up j++
+		let possiblei = i;
+		let possiblej = j;
+		for (possiblej = j; possiblej < 5; possiblej++) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+		}
+		//right i++
+		possiblei = i;
+		possiblej = j;
+		for (possiblei = i; possiblei < 5; possiblei++) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+		}
+		//down j--
+		possiblei = i;
+		possiblej = j;
+		for (possiblej = j; possiblej >= j - 5; possiblej--) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+		}
+		//left i--
+		possiblei = i;
+		possiblej = j;
+		for (possiblei = i; possiblei >= i - 5; possiblei--) {
+			if (this.checkValid(possiblei, possiblej)) {
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+		}
+		return locations;
 	}
 
 	checkValid(i, j) {
