@@ -466,50 +466,105 @@ rhit.Game = class {
 	getKingMoves(i, j, locations) {
 		let loci = 0;
 		//diagonal upperleft i--, j++
-		let possiblei = i;
-		let possiblej = j;
-		for (possiblei = i; possiblei >= 0; possiblei--) {
+		let possiblei = i - 1;
+		let possiblej = j + 1;
+		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 			possiblej++;
 		}
 		//diagonal upperright i++, j++
-		possiblei = i;
-		possiblej = j;
-		for (possiblei = i; possiblei < 8; possiblei++) {
+		possiblei = i + 1;
+		possiblej = j + 1;
+		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 			possiblej++;
 		}
 		//diagonal lowerleft i--, j--
-		possiblei = i;
-		possiblej = j;
-		for (possiblei = i; possiblei >= 0; possiblei--) {
+		possiblei = i - 1;
+		possiblej = j - 1;
+		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 			possiblej--;
 		}
 		//diagonal lowerright, i++, j--
+		possiblei = i + 1;
+		possiblej = j - 1;
+		for (possiblei = i + 1; possiblei < 8; possiblei++) {
+			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+			possiblej--;
+		}
+		//up j++
 		possiblei = i;
-		possiblej = j;
-		for (possiblei = i; possiblei < 8; possiblei++) {
+		possiblej = j + 1;
+		for (possiblej = j + 1; possiblej <= 7; possiblej++) {
+			if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				break;
+			}
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
-			possiblej--;
 		}
-		//TODO: add the straight line movement after rook is fixed
+		//right i++
+		possiblei = i + 1;
+		possiblej = j;
+		for (possiblei = i + 1; possiblei <= 7; possiblei++) {
+			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+		}
+		//down j--
+		possiblei = i;
+		possiblej = j - 1;
+		for (possiblej = j - 1; possiblej >= 0; possiblej--) {
+			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+		}
+		//left i--
+		possiblei = i - 1;
+		possiblej = j;
+		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
+			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
+				locations[loci] = "" + possiblei + possiblej;
+				loci++;
+			}
+		}
 
 		return locations;
 	}
