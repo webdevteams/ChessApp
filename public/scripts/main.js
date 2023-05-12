@@ -578,9 +578,9 @@ rhit.Game = class {
 	getBishopMoves(i, j, locations) {
 		let loci = 0;
 		//diagonal upperleft i--, j++
-		let possiblei = i;
-		let possiblej = j;
-		for (possiblei = i; possiblei >= 0; possiblei--) {
+		let possiblei = i - 1;
+		let possiblej = j + 1;
+		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
@@ -589,9 +589,9 @@ rhit.Game = class {
 			possiblej++;
 		}
 		//diagonal upperright i++, j++
-		possiblei = i;
-		possiblej = j;
-		for (possiblei = i; possiblei < 8; possiblei++) {
+		possiblei = i + 1;
+		possiblej = j + 1;
+		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
@@ -600,9 +600,9 @@ rhit.Game = class {
 			possiblej++;
 		}
 		//diagonal lowerleft i--, j--
-		possiblei = i;
-		possiblej = j;
-		for (possiblei = i; possiblei >= 0; possiblei--) {
+		possiblei = i - 1;
+		possiblej = j - 1;
+		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
@@ -611,9 +611,9 @@ rhit.Game = class {
 			possiblej--;
 		}
 		//diagonal lowerright, i++, j--
-		possiblei = i;
-		possiblej = j;
-		for (possiblei = i; possiblei < 8; possiblei++) {
+		possiblei = i + 1;
+		possiblej = j - 1;
+		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
