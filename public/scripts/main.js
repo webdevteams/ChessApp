@@ -693,8 +693,8 @@ rhit.Game = class {
 		let loci = 0;
 		//up j++
 		let possiblei = i;
-		let possiblej = j;
-		for (possiblej = j; possiblej < 5; possiblej++) {
+		let possiblej = j + 1;
+		for (possiblej = j + 1; possiblej <= j + 5; possiblej++) {
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
@@ -702,9 +702,9 @@ rhit.Game = class {
 			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 		}
 		//right i++
-		possiblei = i;
+		possiblei = i + 1;
 		possiblej = j;
-		for (possiblei = i; possiblei < 5; possiblei++) {
+		for (possiblei = i + 1; possiblei <= i + 5; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
@@ -713,8 +713,8 @@ rhit.Game = class {
 		}
 		//down j--
 		possiblei = i;
-		possiblej = j;
-		for (possiblej = j; possiblej >= j - 5; possiblej--) {
+		possiblej = j - 1;
+		for (possiblej = j - 1; possiblej >= j - 5; possiblej--) {
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
@@ -722,9 +722,9 @@ rhit.Game = class {
 			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 		}
 		//left i--
-		possiblei = i;
+		possiblei = i - 1;
 		possiblej = j;
-		for (possiblei = i; possiblei >= i - 5; possiblei--) {
+		for (possiblei = i - 1; possiblei >= i - 5; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
