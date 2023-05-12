@@ -384,23 +384,23 @@ rhit.Game = class {
 			return locations;
 		}
 		if (piece.includes("king")) {
-			locations = this.getKingMoves(i, j, locations);
+			locations = this.getKingMoves(i, j, piece, locations);
 			return locations;
 		}
 		if (piece.includes("queen")) {
-			locations = this.getQueenMoves(i, j, locations);
+			locations = this.getQueenMoves(i, j, piece, locations);
 			return locations;
 		}
 		if (piece.includes("bishop")) {
-			locations = this.getBishopMoves(i, j, locations);
+			locations = this.getBishopMoves(i, j, piece, locations);
 			return locations;
 		}
 		if (piece.includes("knight")) {
-			locations = this.getKnightMoves(i, j, locations);
+			locations = this.getKnightMoves(i, j, piece, locations);
 			return locations;
 		}
 		if (piece.includes("rook")) {
-			locations = this.getRookMoves(i, j, locations);
+			locations = this.getRookMoves(i, j, piece, locations);
 			return locations;
 		}
 	}
@@ -422,7 +422,7 @@ rhit.Game = class {
 
 		possiblei = i; possiblej = j - 1;
 		if (possiblei >= 0 && possiblei <= 7 && possiblej >= 0 && possiblej <= 7
-			&& this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+			&& this.board[possiblei][possiblej].includes("White")) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -447,7 +447,7 @@ rhit.Game = class {
 
 		possiblei = i; possiblej = j + 1;
 		if (possiblei >= 0 && possiblei <= 7 && possiblej >= 0 && possiblej <= 7
-			&& this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+			&& this.board[possiblei][possiblej].includes("Black")) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -463,18 +463,21 @@ rhit.Game = class {
 	The queen, if removed, eliminates all pieces in a 3x3 radius, changes colors of pieces around it?
 */
 
-	getKingMoves(i, j, locations) {
+	getKingMoves(i, j, piece, locations) {
 		let loci = 0;
 		//diagonal upperleft i--, j++
 		let possiblei = i - 1;
 		let possiblej = j + 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 			possiblej++;
 		}
@@ -483,11 +486,14 @@ rhit.Game = class {
 		possiblej = j + 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 			possiblej++;
 		}
@@ -496,11 +502,14 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 			possiblej--;
 		}
@@ -509,11 +518,14 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 			possiblej--;
 		}
@@ -521,12 +533,15 @@ rhit.Game = class {
 		possiblei = i;
 		possiblej = j + 1;
 		for (possiblej = j + 1; possiblej <= 7; possiblej++) {
-			if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
-				break;
-			}
 			if (this.checkValid(possiblei, possiblej)) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 		}
 		//right i++
@@ -534,11 +549,14 @@ rhit.Game = class {
 		possiblej = j;
 		for (possiblei = i + 1; possiblei <= 7; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 		}
 		//down j--
@@ -546,11 +564,14 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblej = j - 1; possiblej >= 0; possiblej--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 		}
 		//left i--
@@ -558,18 +579,21 @@ rhit.Game = class {
 		possiblej = j;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 		}
 
 		return locations;
 	}
 
-	getQueenMoves(i, j, locations) {
+	getQueenMoves(i, j, piece, locations) {
 		let loci = 0;
 		//upper left i--, j++
 		let possiblei = i - 1;
@@ -630,7 +654,7 @@ rhit.Game = class {
 		return locations;
 	}
 
-	getBishopMoves(i, j, locations) {
+	getBishopMoves(i, j, piece, locations) {
 		let loci = 0;
 		//diagonal upperleft i--, j++
 		let possiblei = i - 1;
@@ -687,7 +711,7 @@ rhit.Game = class {
 		return locations;
 	}
 
-	getKnightMoves(i, j, locations) {
+	getKnightMoves(i, j, piece, locations) {
 		let loci = 0;
 		//top left i-1 j+2
 		let possiblei = i - 1;
@@ -752,7 +776,7 @@ rhit.Game = class {
 		return locations;
 	}
 
-	getRookMoves(i, j, locations) {
+	getRookMoves(i, j, piece, locations) {
 		let loci = 0;
 		//up j++
 		let possiblei = i;
@@ -809,6 +833,19 @@ rhit.Game = class {
 		if ((i >= 0 && i <= 7 && j >= 0 && j <= 7)) {
 			return true;
 		}
+	}
+
+	checkCapture(piece, i, j) {
+		if(this.board[i][j] == rhit.Game.Piece.NONE) {
+			return true;
+		}
+		if(piece.includes("White") && this.board[i][j].includes("Black")) {
+			return true;
+		}
+		if(piece.includes("Black") && this.board[i][j].includes("White")) {
+			return true;
+		}
+		return false;
 	}
 
 	getPieceAtLocation(row, col) {
