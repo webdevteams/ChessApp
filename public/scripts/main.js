@@ -598,56 +598,56 @@ rhit.Game = class {
 		//upper left i--, j++
 		let possiblei = i - 1;
 		let possiblej = j + 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 		//up j++
 		possiblei = i;
 		possiblej = j + 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 		//upper right i++, j++
 		possiblei = i + 1;
 		possiblej = j + 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 		//right i++
 		possiblei = i + 1;
 		possiblej = j;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 		//lower right i++, j--
 		possiblei = i + 1;
 		possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 		//down j--
 		possiblei = i;
 		possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 		//lower left i--, j--
 		possiblei = i - 1;
 		possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 		//left i--
 		possiblei = i - 1;
 		possiblej = j;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -661,11 +661,14 @@ rhit.Game = class {
 		let possiblej = j + 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 			possiblej++;
 		}
@@ -674,11 +677,14 @@ rhit.Game = class {
 		possiblej = j + 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 			possiblej++;
 		}
@@ -687,11 +693,14 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 			possiblej--;
 		}
@@ -700,11 +709,14 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 			possiblej--;
 		}
@@ -716,14 +728,14 @@ rhit.Game = class {
 		//top left i-1 j+2
 		let possiblei = i - 1;
 		let possiblej = j + 2;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
 		//top right i+1 j+2
 		possiblei = i + 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -731,14 +743,14 @@ rhit.Game = class {
 		//right top i+2 j+1
 		possiblei = i + 2;
 		possiblej = j + 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
 		//right bottom i+2 j-1
 		possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -746,14 +758,14 @@ rhit.Game = class {
 		//bottom right i+1 j-2
 		possiblei = i + 1;
 		possiblej = j - 2;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
 		//bottom left i-1 j-2
 		possiblei = i - 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -761,14 +773,14 @@ rhit.Game = class {
 		//left bottom i-2 j-1
 		possiblei = i - 2;
 		possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
 		//left top i-2 j+1
 		possiblej = j + 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.checkCapture(piece, possiblei, possiblej)) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -782,24 +794,31 @@ rhit.Game = class {
 		let possiblei = i;
 		let possiblej = j + 1;
 		for (possiblej = j + 1; possiblej <= j + 5; possiblej++) {
-			if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
-				break;
-			}
 			if (this.checkValid(possiblei, possiblej)) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
+			
 		}
 		//right i++
 		possiblei = i + 1;
 		possiblej = j;
 		for (possiblei = i + 1; possiblei <= i + 5; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 		}
 		//down j--
@@ -807,11 +826,14 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblej = j - 1; possiblej >= j - 5; possiblej--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 		}
 		//left i--
@@ -819,11 +841,14 @@ rhit.Game = class {
 		possiblej = j;
 		for (possiblei = i - 1; possiblei >= i - 5; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				if(!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 			}
 		}
 		return locations;
