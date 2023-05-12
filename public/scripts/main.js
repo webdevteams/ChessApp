@@ -409,13 +409,13 @@ rhit.Game = class {
 		let loci = 0;
 
 		let possiblei = i - 1; let possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[i][j] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
 		possiblei = i + 1; possiblej = j - 1;
-		if (this.checkValid(possiblei, possiblej) && this.board[i][j] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -685,7 +685,7 @@ rhit.Game = class {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
-		
+
 		return locations;
 	}
 
