@@ -625,7 +625,68 @@ rhit.Game = class {
 	}
 
 	getKnightMoves(i, j, locations) {
+		let loci = 0;
+		//top left i-1 j+2
+		let possiblei = i - 1;
+		let possiblej = j + 2;
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
 
+		//top right i+1 j+2
+		possiblei = i + 1;
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+
+		//right top i+2 j+1
+		possiblei = i + 2;
+		possiblej = j + 1;
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+
+		//right bottom i+2 j-1
+		possiblej = j - 1;
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+
+		//bottom right i+1 j-2
+		possiblei = i + 1;
+		possiblej = j - 2;
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+
+		//bottom left i-1 j-2
+		possiblei = i - 1;
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+
+		//left bottom i-2 j-1
+		possiblei = i - 2;
+		possiblej = j - 1;
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+
+		//left top i-2 j+1
+		possiblej = j + 1;
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+			locations[loci] = "" + possiblei + possiblej;
+			loci++;
+		}
+		
+		return locations;
 	}
 
 	getRookMoves(i, j, locations) {
