@@ -582,10 +582,12 @@ rhit.Game = class {
 		let possiblej = j + 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 			possiblej++;
 		}
 		//diagonal upperright i++, j++
@@ -593,10 +595,12 @@ rhit.Game = class {
 		possiblej = j + 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 			possiblej++;
 		}
 		//diagonal lowerleft i--, j--
@@ -604,10 +608,12 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 			possiblej--;
 		}
 		//diagonal lowerright, i++, j--
@@ -615,11 +621,13 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
 			possiblej--;
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 		}
 		return locations;
 	}
@@ -695,41 +703,49 @@ rhit.Game = class {
 		let possiblei = i;
 		let possiblej = j + 1;
 		for (possiblej = j + 1; possiblej <= j + 5; possiblej++) {
+			if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+				break;
+			}
 			if (this.checkValid(possiblei, possiblej)) {
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 		}
 		//right i++
 		possiblei = i + 1;
 		possiblej = j;
 		for (possiblei = i + 1; possiblei <= i + 5; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 		}
 		//down j--
 		possiblei = i;
 		possiblej = j - 1;
 		for (possiblej = j - 1; possiblej >= j - 5; possiblej--) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 		}
 		//left i--
 		possiblei = i - 1;
 		possiblej = j;
 		for (possiblei = i - 1; possiblei >= i - 5; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
+				if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {
+					break;
+				}
 				locations[loci] = "" + possiblei + possiblej;
 				loci++;
 			}
-			//if (this.board[possiblei][possiblej] != rhit.Game.Piece.NONE) {break;}
 		}
 		return locations;
 	}
