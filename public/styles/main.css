@@ -34,6 +34,36 @@ body {
     color: red;
 }
 
+.modal-content {
+    background-color: #D9D9D9;
+}
+
+.modal-body div {
+    display: block;
+    overflow: auto;
+    padding-bottom: 10px;
+}
+
+.modal-body img {
+    height: 80px;
+    float: left;
+    padding-right: 5px;
+}
+
+#KingDiv {
+    position: relative;
+}
+
+#KingText {
+    position: absolute;
+    top: 0;
+}
+
+#BottomText {
+    position: absolute;
+    bottom: 0;
+}
+
 a,
 a:hover,
 a:focus,

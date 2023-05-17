@@ -31,13 +31,54 @@
         <a class="navbar-brand">Menu</a>
       </header>
       <ul class="list-group">
-        <a id="menuShowAllQuotes" class="list-group-item"><i class="material-icons">people</i>Moves</a>
-        <a id="menuShowMyQuotes" class="list-group-item" href="leaderboard.html"><i
+        <a id="menuShowMoves" class="list-group-item" data-toggle="modal" data-target="#movesModal"><i class="material-icons">people</i>Moves</a>
+        <a id="menuShowLeaderboard" class="list-group-item" href="leaderboard.html"><i
             class="material-icons">person</i>Leaderboard</a>
         <a id="menuSignOut" class="list-group-item" href="index.html"><i class="material-icons">logout</i>Log Out</a>
         <a id="menuDeleteAccount" class="list-group-item" href="deleteAccount.html"><i
             class="material-icons">delete</i>Delete Account</a>
       </ul>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="movesModal" tabindex="-1" role="dialog" aria-labelledby="movesTitle"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="movesTitle">Moves</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <img src="images/PawnBlack.png">
+              The pawn had too much to drink, its moves have been swapped. It moves forward diagonally and captures in front of itself.
+            </div>
+            <div>
+              <img src="images/RookBlack.png">
+              The rook can move in the same directions, but for its sins it has been restrained and can only move up to 5 spaces.
+            </div>
+            <div>
+              <img src="images/KnightBlack.png">
+              The knight is the perfect chess piece. It has no flaw. As such, its moves are unchanged.
+            </div>
+            <div>
+              <img src="images/BishopBlack.png">
+              The bishop is not allowed to move on Sundays, but it likes to break the rules.
+            </div>
+            <div>
+              <img src="images/QueenBlack.png">
+              The queen is tired of doing all of the work, so she has swapped moves with the king.
+            </div>
+            <div id="KingDiv">
+              <img src="images/KingBlack.png">
+              <span id="KingText">King</span>
+              <span id="BottomText">Bottom Text</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <main class="bmd-layout-content">
       <div id="gameBoardPage" class="container page-container-board">
