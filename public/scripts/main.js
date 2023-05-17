@@ -79,6 +79,15 @@ rhit.gameBoardPageController = class {
 				console.log("added");
 				space.onclick = (event) => {
 					let locations = new Array(1);
+					for (let cx = 0; cx < 8; cx++) {
+						for (let cy = 0; cy < 8; cy++) {
+							if (this.game.board[cx][cy] == rhit.Game.Piece.MOVABLE) {
+								this.game.board[cx][cy] = rhit.Game.Piece.NONE;
+							}
+						}
+					}
+					this.updateView();
+					this.pieceListeners();
 					locations = this.game.getMoves(piece, i, j, locations);
 					console.log(locations);
 					if (locations.length == 1 && locations[0] == undefined) {
@@ -87,13 +96,59 @@ rhit.gameBoardPageController = class {
 					else {
 
 						for (let x = 0; x < locations.length; x++) {
+							const newi = parseInt(locations[x].substring(0, 1));
+							const newj = parseInt(locations[x].substring(1));
+
+							if (this.game.board[newi][newj] == rhit.Game.Piece.NONE) {
+								this.game.board[newi][newj] = rhit.Game.Piece.MOVABLE;
+							}
+
+							this.updateView();
+
+							if (this.game.board[newi][newj] != rhit.Game.Piece.NONE && this.game.board[newi][newj] != rhit.Game.Piece.MOVABLE) {
+								document.getElementById("" + newi + newj).style = "border: 3px solid #ff0000;"
+								console.log(document.getElementById("" + newi + newj));
+							}
+
+
 							document.getElementById(locations[x]).onclick = (event) => {
 								console.log("clicked");
 								this.game.board[i][j] = rhit.Game.Piece.NONE;
-								const newi = parseInt(locations[x].substring(0, 1));
-								const newj = parseInt(locations[x].substring(1));
 								this.game.board[newi][newj] = piece;
+								for (let y = 0; y < locations.length; y++) {
+									if (y != x) {
+										const noni = parseInt(locations[y].substring(0, 1));
+										const nonj = parseInt(locations[y].substring(1));
+										this.game.board[noni][nonj] = rhit.Game.Piece.NONE;
+									}
+								}
 								this.updateView();
+
+								//win checking
+								let wincount = 0;
+								let opposite;
+								if(this.game.getState() == rhit.Game.State.BLACK_TURN){
+									opposite = "White";
+								}
+								else if(this.game.getState() == rhit.Game.State.WHITE_TURN){
+									opposite = "Black";
+								}
+								for(let winx = 0; winx < 8; winx++){
+									for(let winy = 0; winy < 8; winy++){
+										if(this.game.board[winx][winy].includes(opposite)){
+											wincount++;
+										}
+									}
+								}
+								if(wincount == 0 && this.game.getState() == rhit.Game.State.BLACK_TURN){
+									this.game.state = rhit.Game.State.BLACK_WIN;
+								}
+								else if(wincount == 0 && this.game.getState() == rhit.Game.State.WHITE_TURN){
+									this.game.state = rhit.Game.State.WHITE_WIN;
+								}
+
+
+								//turn switching
 								if (this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									this.game.state = rhit.Game.State.WHITE_TURN;
 								}
@@ -127,42 +182,59 @@ rhit.gameBoardPageController = class {
 				switch (this.game.board[i][j]) {
 					case rhit.Game.Piece.NONE:
 						document.getElementById(`${spaceID}`).src = "images/transparent.png";
+						document.getElementById(`${spaceID}`).style = "";
+						break;
+					case rhit.Game.Piece.MOVABLE:
+						document.getElementById(`${spaceID}`).src = "images/MoveableSpace.svg";
+						document.getElementById(`${spaceID}`).style = "display: block; margin-left: auto; margin-right: auto;; height: 40px; width:40px;"
 						break;
 					case rhit.Game.Piece.WHITE_ROOK:
 						document.getElementById(`${spaceID}`).src = "images/RookWhite.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.BLACK_ROOK:
 						document.getElementById(`${spaceID}`).src = "images/RookBlack.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.WHITE_KNIGHT:
 						document.getElementById(`${spaceID}`).src = "images/KnightWhite.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.BLACK_KNIGHT:
 						document.getElementById(`${spaceID}`).src = "images/KnightBlack.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.WHITE_BISHOP:
 						document.getElementById(`${spaceID}`).src = "images/BishopWhite.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.BLACK_BISHOP:
 						document.getElementById(`${spaceID}`).src = "images/BishopBlack.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.WHITE_QUEEN:
 						document.getElementById(`${spaceID}`).src = "images/QueenWhite.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.BLACK_QUEEN:
 						document.getElementById(`${spaceID}`).src = "images/QueenBlack.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.WHITE_KING:
 						document.getElementById(`${spaceID}`).src = "images/KingWhite.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.BLACK_KING:
 						document.getElementById(`${spaceID}`).src = "images/KingBlack.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.WHITE_PAWN:
 						document.getElementById(`${spaceID}`).src = "images/PawnWhite.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 					case rhit.Game.Piece.BLACK_PAWN:
 						document.getElementById(`${spaceID}`).src = "images/PawnBlack.png";
+						document.getElementById(`${spaceID}`).style = "";
 						break;
 				}
 			}
@@ -435,13 +507,13 @@ rhit.Game = class {
 		let loci = 0;
 
 		let possiblei = i - 1; let possiblej = j + 1;
-		if (this.checkValid(possiblei, possiblej)  && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
 		possiblei = i + 1; possiblej = j + 1;
-		if (this.checkValid(possiblei, possiblej)  && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
+		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -455,14 +527,14 @@ rhit.Game = class {
 
 		return locations;
 	}
-/*
-	Pawns can only move diagonally and attack forwards
-	Knights move the same
-	Swap movement of king and queen
-	Bishops can’t move on sundays
-	Rooks can only move a maximum of 5 spaces at once
-	The queen, if removed, eliminates all pieces in a 3x3 radius, changes colors of pieces around it?
-*/
+	/*
+		Pawns can only move diagonally and attack forwards
+		Knights move the same
+		Swap movement of king and queen
+		Bishops can’t move on sundays
+		Rooks can only move a maximum of 5 spaces at once
+		The queen, if removed, eliminates all pieces in a 3x3 radius, changes colors of pieces around it?
+	*/
 
 	getKingMoves(i, j, piece, locations) {
 		let loci = 0;
@@ -471,7 +543,7 @@ rhit.Game = class {
 		let possiblej = j + 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -487,7 +559,7 @@ rhit.Game = class {
 		possiblej = j + 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -503,7 +575,7 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -519,7 +591,7 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -535,7 +607,7 @@ rhit.Game = class {
 		possiblej = j + 1;
 		for (possiblej = j + 1; possiblej <= 7; possiblej++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -550,7 +622,7 @@ rhit.Game = class {
 		possiblej = j;
 		for (possiblei = i + 1; possiblei <= 7; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -565,7 +637,7 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblej = j - 1; possiblej >= 0; possiblej--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -580,7 +652,7 @@ rhit.Game = class {
 		possiblej = j;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -662,7 +734,7 @@ rhit.Game = class {
 		let possiblej = j + 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -678,7 +750,7 @@ rhit.Game = class {
 		possiblej = j + 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -694,7 +766,7 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i - 1; possiblei >= 0; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -710,7 +782,7 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblei = i + 1; possiblei < 8; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -796,7 +868,7 @@ rhit.Game = class {
 		let possiblej = j + 1;
 		for (possiblej = j + 1; possiblej <= j + 5; possiblej++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -805,14 +877,14 @@ rhit.Game = class {
 					break;
 				}
 			}
-			
+
 		}
 		//right i++
 		possiblei = i + 1;
 		possiblej = j;
 		for (possiblei = i + 1; possiblei <= i + 5; possiblei++) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -827,7 +899,7 @@ rhit.Game = class {
 		possiblej = j - 1;
 		for (possiblej = j - 1; possiblej >= j - 5; possiblej--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -842,7 +914,7 @@ rhit.Game = class {
 		possiblej = j;
 		for (possiblei = i - 1; possiblei >= i - 5; possiblei--) {
 			if (this.checkValid(possiblei, possiblej)) {
-				if(!this.checkCapture(piece, possiblei, possiblej)) {
+				if (!this.checkCapture(piece, possiblei, possiblej)) {
 					break;
 				}
 				locations[loci] = "" + possiblei + possiblej;
@@ -862,13 +934,13 @@ rhit.Game = class {
 	}
 
 	checkCapture(piece, i, j) {
-		if(this.board[i][j] == rhit.Game.Piece.NONE) {
+		if (this.board[i][j] == rhit.Game.Piece.NONE) {
 			return true;
 		}
-		if(piece.includes("White") && this.board[i][j].includes("Black")) {
+		if (piece.includes("White") && this.board[i][j].includes("Black")) {
 			return true;
 		}
-		if(piece.includes("Black") && this.board[i][j].includes("White")) {
+		if (piece.includes("Black") && this.board[i][j].includes("White")) {
 			return true;
 		}
 		return false;
@@ -1061,7 +1133,7 @@ rhit.main = function () {
 
 
 
-	
+
 
 };
 
