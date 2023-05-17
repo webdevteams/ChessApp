@@ -76,9 +76,9 @@ rhit.gameBoardPageController = class {
 
 			if ((piece != rhit.Game.Piece.NONE) && ((state == rhit.Game.State.WHITE_TURN && piece.includes("White")) || (state == rhit.Game.State.BLACK_TURN && piece.includes("Black")))) {
 
-				console.log("added");
 				space.onclick = (event) => {
 					let locations = new Array(1);
+					this.updateView();
 					for (let cx = 0; cx < 8; cx++) {
 						for (let cy = 0; cy < 8; cy++) {
 							if (this.game.board[cx][cy] == rhit.Game.Piece.MOVABLE) {
@@ -101,13 +101,14 @@ rhit.gameBoardPageController = class {
 
 							if (this.game.board[newi][newj] == rhit.Game.Piece.NONE) {
 								this.game.board[newi][newj] = rhit.Game.Piece.MOVABLE;
+								document.getElementById(""+newi+newj).src = "images/MoveableSpace.svg";
+								document.getElementById(""+newi+newj).style = "display: block; margin-left: auto; margin-right: auto;; height: 40px; width:40px;"
 							}
 
-							this.updateView();
 
 							if (this.game.board[newi][newj] != rhit.Game.Piece.NONE && this.game.board[newi][newj] != rhit.Game.Piece.MOVABLE) {
 								document.getElementById("" + newi + newj).style = "border: 3px solid #ff0000;"
-								console.log(document.getElementById("" + newi + newj));
+								console.log("border: " + newi + newj);
 							}
 
 
@@ -116,9 +117,9 @@ rhit.gameBoardPageController = class {
 								this.game.board[i][j] = rhit.Game.Piece.NONE;
 								this.game.board[newi][newj] = piece;
 								for (let y = 0; y < locations.length; y++) {
-									if (y != x) {
-										const noni = parseInt(locations[y].substring(0, 1));
-										const nonj = parseInt(locations[y].substring(1));
+									const noni = parseInt(locations[y].substring(0, 1));
+									const nonj = parseInt(locations[y].substring(1));
+									if (y != x && this.game.board[noni][nonj] == rhit.Game.Piece.MOVABLE) {
 										this.game.board[noni][nonj] = rhit.Game.Piece.NONE;
 									}
 								}
@@ -127,23 +128,23 @@ rhit.gameBoardPageController = class {
 								//win checking
 								let wincount = 0;
 								let opposite;
-								if(this.game.getState() == rhit.Game.State.BLACK_TURN){
+								if (this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									opposite = "White";
 								}
-								else if(this.game.getState() == rhit.Game.State.WHITE_TURN){
+								else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
 									opposite = "Black";
 								}
-								for(let winx = 0; winx < 8; winx++){
-									for(let winy = 0; winy < 8; winy++){
-										if(this.game.board[winx][winy].includes(opposite)){
+								for (let winx = 0; winx < 8; winx++) {
+									for (let winy = 0; winy < 8; winy++) {
+										if (this.game.board[winx][winy].includes(opposite)) {
 											wincount++;
 										}
 									}
 								}
-								if(wincount == 0 && this.game.getState() == rhit.Game.State.BLACK_TURN){
+								if (wincount == 0 && this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									this.game.state = rhit.Game.State.BLACK_WIN;
 								}
-								else if(wincount == 0 && this.game.getState() == rhit.Game.State.WHITE_TURN){
+								else if (wincount == 0 && this.game.getState() == rhit.Game.State.WHITE_TURN) {
 									this.game.state = rhit.Game.State.WHITE_WIN;
 								}
 
@@ -168,7 +169,6 @@ rhit.gameBoardPageController = class {
 				space.onclick = (event) => {
 
 				}
-				console.log("removed");
 			}
 
 
