@@ -89,7 +89,7 @@ rhit.gameBoardPageController = class {
 					this.updateView();
 					this.pieceListeners();
 					locations = this.game.getMoves(piece, i, j, locations);
-					console.log(locations);
+					// console.log(locations);
 					if (locations.length == 1 && locations[0] == undefined) {
 						console.log("cannot move piece");
 					}
@@ -108,12 +108,11 @@ rhit.gameBoardPageController = class {
 
 							if (this.game.board[newi][newj] != rhit.Game.Piece.NONE && this.game.board[newi][newj] != rhit.Game.Piece.MOVABLE) {
 								document.getElementById("" + newi + newj).style = "border: 3px solid #ff0000;"
-								console.log("border: " + newi + newj);
 							}
 
 
 							document.getElementById(locations[x]).onclick = (event) => {
-								console.log("clicked");
+								// console.log("clicked");
 								this.game.board[i][j] = rhit.Game.Piece.NONE;
 								this.game.board[newi][newj] = piece;
 								for (let y = 0; y < locations.length; y++) {
