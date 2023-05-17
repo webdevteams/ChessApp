@@ -292,7 +292,8 @@ rhit.Game = class {
 		BLACK_BISHOP: "Black bishop",
 		BLACK_QUEEN: "Black queen",
 		BLACK_KING: "Black king",
-		NONE: ""
+		NONE: "",
+		MOVABLE: "movable"
 	}
 
 	static State = {
