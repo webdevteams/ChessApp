@@ -243,21 +243,17 @@ rhit.gameBoardPageController = class {
 
 rhit.leaderboardPageController = class {
 	constructor() {
+
+        console.log("Black id = ", this.blackAuthManager.uidBlack());
+        console.log("White id = ", this.whiteAuthManager.uidWhite());
+
 		document.querySelector("#menuSignOut").onclick = (event) => {
 			rhit.whiteAuthManager.signOut();
 			rhit.blackAuthManager.signOut();
 		};
 
 		this.players = []; // Array to store player information
-
-		// Load player data from the db.json file
-		this.loadPlayerData().then(() => {
-			// Update the leaderboard view after loading player data
-			this.updateLeaderboardView();
-
-			// Example: Add a new player
-			this.addPlayer("JohnDoe");
-		});
+        //...
 	}
 
 	async loadPlayerData() {
@@ -283,43 +279,15 @@ rhit.leaderboardPageController = class {
 
 	addPlayer(username) {
 		// Check if the player already exists
-		const existingPlayer = this.players.find((player) => player.username === username);
-
-		if (existingPlayer) {
-			// Player already exists, do not add a new entry
-			return;
-		}
-
+		
+		// Player already exists, do not add a new entry
+		
 		// Add a new player entry with initial game and win counts
-		const newPlayer = {
-			username: username,
-			gamesPlayed: 0,
-			wins: 0,
-		};
-
-		this.players.push(newPlayer);
 
 		// Save the updated player data to the db.json file
-		this.savePlayerData().catch((error) => {
-			console.error("Failed to save player data:", error);
-		});
 
 		// Update the leaderboard view
-		this.updateLeaderboardView();
-	}
 
-	updateLeaderboardView() {
-		// Example: Update the leaderboard view based on the players array
-		// You can modify this code to suit your specific leaderboard design
-
-		const leaderboardContainer = document.querySelector("#leaderboardContainer");
-		leaderboardContainer.innerHTML = ""; // Clear the container
-
-		for (const player of this.players) {
-			const playerEntry = document.createElement("div");
-			playerEntry.textContent = `${player.username}: Games Played - ${player.gamesPlayed}, Wins - ${player.wins}`;
-			leaderboardContainer.appendChild(playerEntry);
-		}
 	}
 
     _createCard(player) {
@@ -336,7 +304,7 @@ rhit.leaderboardPageController = class {
     }
 
     //given a list of players, change the HTML page leaderboard.html
-    populateLeaderboard(players) {
+    populateLeaderboard(num_players) {
         const leaderboardContainer = document.getElementById("leaderboardContainer");
         while (leaderboardContainer.firstChild) {
             leaderboardContainer.removeChild(leaderboardContainer.firstChild);
