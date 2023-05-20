@@ -11,7 +11,7 @@ body {
     margin-top: 75px;
 }
 
-.page-container-board{
+.page-container-board {
     margin-top: 55px;
 }
 
@@ -111,15 +111,15 @@ a:active {
     text-align: center;
 }
 
-@media (min-width: 1px){
+@media (min-width: 1px) {
     .chess-board td {
         border: 2px solid;
         width: 2.5em;
-        height: 2.5     em;
+        height: 2.5 em;
     }
 }
 
-@media (min-width: 447px){
+@media (min-width: 447px) {
     .chess-board td {
         border: 2px solid;
         width: 3em;
@@ -127,7 +127,7 @@ a:active {
     }
 }
 
-@media (min-width: 576px){
+@media (min-width: 576px) {
     .chess-board td {
         border: 2px solid;
         width: 4em;
@@ -135,7 +135,7 @@ a:active {
     }
 }
 
-@media (min-width: 780px){
+@media (min-width: 780px) {
     .chess-board td {
         border: 2px solid;
         width: 5em;
@@ -151,8 +151,32 @@ a:active {
     background: #005099;
 }
 
-td img{
+td img {
     display: block;
     width: 100%;
 }
 
+#l1,
+#l2 {
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    padding-right: 25px;
+    
+}
+
+#c1,
+#c2 {
+    height: 25px;
+    width: 25px;
+}
+
+#l1 {
+    margin-top: 200px;
+    margin-bottom: 50px;
+}
+
+#l2 {
+    margin-bottom: 200px;
+    margin-top: 50px;
+}

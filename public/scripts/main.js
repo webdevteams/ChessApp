@@ -51,6 +51,12 @@ rhit.blackLoginPageController = class {
 	}
 }
 
+rhit.deleteAccountController = class {
+	constructor() {
+		document.querySelector("")
+	};
+}
+
 rhit.gameBoardPageController = class {
 	constructor() {
 		this.game = new rhit.Game();
