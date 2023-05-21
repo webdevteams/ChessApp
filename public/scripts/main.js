@@ -70,9 +70,10 @@ rhit.deleteAccountController = class {
 						});
 					});
 			}
+
 			rhit.whiteAuthManager.signOut();
 			rhit.blackAuthManager.signOut();
-			window.location.href = "/index.html"
+			setTimeout(() => {window.location.href = "/index.html"}, "1000");
 		}
 	};
 }
