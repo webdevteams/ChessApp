@@ -265,22 +265,22 @@ rhit.leaderboardPageController = class {
         //...
 	}
 
+	//load data of all users ever saved
 	loadPlayerData() {
 		
 	}
 
+	//add new player to database if doesn't exist already
 	savePlayerData() {
 		
 	}
 
-	addNewPlayer(username) {
-		
-	}
-
+	//self explanatory
 	updateOnGameOver(player1, player2) {
-		
+
 	} 
 
+	//card elements for leaderboard.html - may need updating
     _createCard(player) {
         const cardTemplate = `
             <div class="card">
@@ -294,7 +294,7 @@ rhit.leaderboardPageController = class {
         return htmlToElement(cardTemplate);
     }
 
-    //given a list of players, change the HTML page leaderboard.html
+    //given a list of players, populate this list on the HTML page leaderboard.html
     populateLeaderboard() {
         const leaderboardContainer = document.getElementById("leaderboardContainer");
         while (leaderboardContainer.firstChild) {
