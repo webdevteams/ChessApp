@@ -58,7 +58,7 @@ rhit.deleteAccountController = class {
 	};
 }
 
-rhit.gameBoardPageController = class {
+rhit.GameBoardPageController = class {
 	constructor() {
 		this.game = new rhit.Game();
 		this.game.initializeGame();
@@ -99,8 +99,7 @@ rhit.gameBoardPageController = class {
 					// console.log(locations);
 					if (locations.length == 1 && locations[0] == undefined) {
 						console.log("cannot move piece");
-					}
-					else {
+					} else {
 
 						for (let x = 0; x < locations.length; x++) {
 							const newi = parseInt(locations[x].substring(0, 1));
@@ -108,8 +107,8 @@ rhit.gameBoardPageController = class {
 
 							if (this.game.board[newi][newj] == rhit.Game.Piece.NONE) {
 								this.game.board[newi][newj] = rhit.Game.Piece.MOVABLE;
-								document.getElementById(""+newi+newj).src = "images/MoveableSpace.svg";
-								document.getElementById(""+newi+newj).style = "display: block; margin-left: auto; margin-right: auto;; height: 40px; width:40px;"
+								document.getElementById("" + newi + newj).src = "images/MoveableSpace.svg";
+								document.getElementById("" + newi + newj).style = "display: block; margin-left: auto; margin-right: auto;; height: 40px; width:40px;"
 							}
 
 
@@ -136,8 +135,7 @@ rhit.gameBoardPageController = class {
 								let opposite;
 								if (this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									opposite = "White";
-								}
-								else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
+								} else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
 									opposite = "Black";
 								}
 								for (let winx = 0; winx < 8; winx++) {
@@ -149,8 +147,7 @@ rhit.gameBoardPageController = class {
 								}
 								if (wincount == 0 && this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									this.game.state = rhit.Game.State.BLACK_WIN;
-								}
-								else if (wincount == 0 && this.game.getState() == rhit.Game.State.WHITE_TURN) {
+								} else if (wincount == 0 && this.game.getState() == rhit.Game.State.WHITE_TURN) {
 									this.game.state = rhit.Game.State.WHITE_WIN;
 								}
 
@@ -158,8 +155,7 @@ rhit.gameBoardPageController = class {
 								//turn switching
 								if (this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									this.game.state = rhit.Game.State.WHITE_TURN;
-								}
-								else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
+								} else if (this.game.getState() == rhit.Game.State.WHITE_TURN) {
 									this.game.state = rhit.Game.State.BLACK_TURN;
 								}
 
@@ -170,8 +166,7 @@ rhit.gameBoardPageController = class {
 						}
 					}
 				}
-			}
-			else {
+			} else {
 				space.onclick = (event) => {
 
 				}
@@ -248,41 +243,104 @@ rhit.gameBoardPageController = class {
 	}
 }
 
-rhit.leaderboardPageController = class {
+rhit.LeaderboardPageController = class {
 	constructor() {
 
-		let blackUsername = `${localStorage.getItem("blackUserName")}`;
-		let whiteUserName = `${localStorage.getItem("whiteUserName")}`;
-        console.log(`Black user: ${localStorage.getItem("blackUserName")}`);
-        console.log(`White user: ${localStorage.getItem("whiteUserName")}`);
+		this.blackUsername = `${localStorage.getItem("blackUserName")}`;
+		this.whiteUsername = `${localStorage.getItem("whiteUserName")}`;
 
 		document.querySelector("#menuSignOut").onclick = (event) => {
 			rhit.whiteAuthManager.signOut();
 			rhit.blackAuthManager.signOut();
 		};
 
+		this._ref = firebase.firestore().collection("Users");
+		this.blackDocId = null;
+		this.whiteDocId = null;
+
 		this.players = []; // Array to store player information
-        //...
+		//...
 	}
 
 	//load data of all users ever saved
 	loadPlayerData() {
-		
+
 	}
 
 	//add new player to database if doesn't exist already
-	savePlayerData() {
-		
+	savePlayerData(playerName) {
+		this._ref.add({
+				["games"]: 1,
+				["lastUpdated"]: firebase.firestore.Timestamp.now(),
+				["user"]: playerName,
+				["wins"]: 0
+			})
+			.then(function (docRef) {
+				if (playerName == this.blackUsername) {
+					this.blackDocId = docRef.id;
+				} else {
+					this.whiteDocId = docRef.id;
+				}
+			});
 	}
 
 	//self explanatory
-	updateOnGameOver(player1, player2) {
-
-	} 
+	updateOnGameOver() {
+		this._ref.where("user", "==", this.blackUsername).get()
+			.then((querySnapshot) => {
+				if (querySnapshot.empty) {
+					savePlayerData(this.blackUsername);
+				} else {
+					this.blackDocId = querySnapshot.docs[0].id;
+					this._ref.doc(this.blackDocId).get().then(doc => {
+						let games = doc.data().games + 1;
+						this._ref.doc(this.blackDocId).update({
+							["lastUpdated"]: firebase.firestore.Timestamp.now(),
+							["games"]: games
+						});
+					});
+				}
+			})
+			.then(response => {
+				this._ref.where("user", "==", this.whiteUsername).get()
+					.then((querySnapshot) => {
+						if (querySnapshot.empty) {
+							savePlayerData(this.whiteUsername);
+						} else {
+							this.whiteDocId = querySnapshot.docs[0].id;
+							this._ref.doc(this.whiteDocId).get().then(doc => {
+								let games = doc.data().games + 1;
+								this._ref.doc(this.whiteDocId).update({
+									["lastUpdated"]: firebase.firestore.Timestamp.now(),
+									["games"]: games
+								});
+							});
+						}
+					}).then(response => {
+						if (rhit.gameBoardPageController.game.state == rhit.Game.State.BLACK_WIN) {
+							this._ref.doc(this.blackDocId).get().then(doc => {
+								let wins = doc.data().wins + 1;
+								this._ref.doc(this.blackDocId).update({
+									["lastUpdated"]: firebase.firestore.Timestamp.now(),
+									["wins"]: wins
+								});
+							});
+						} else {
+							this._ref.doc(this.whiteDocId).get().then(doc => {
+								let wins = doc.data().wins + 1;
+								this._ref.doc(this.whiteDocId).update({
+									["lastUpdated"]: firebase.firestore.Timestamp.now(),
+									["wins"]: wins
+								});
+							});
+						}
+					});
+			});
+	}
 
 	//card elements for leaderboard.html - may need updating
-    _createCard(player) {
-        const cardTemplate = `
+	_createCard(player) {
+		const cardTemplate = `
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">${player.name}</h5>
@@ -291,20 +349,20 @@ rhit.leaderboardPageController = class {
                 </div>
             </div>
         `;
-        return htmlToElement(cardTemplate);
-    }
+		return htmlToElement(cardTemplate);
+	}
 
-    //given a list of players, populate this list on the HTML page leaderboard.html
-    populateLeaderboard() {
-        const leaderboardContainer = document.getElementById("leaderboardContainer");
-        while (leaderboardContainer.firstChild) {
-            leaderboardContainer.removeChild(leaderboardContainer.firstChild);
-        }
-        players.forEach(player => {
-            const cardElement = this._createCard(player);
-            leaderboardContainer.appendChild(cardElement);
-        });
-    }
+	//given a list of players, populate this list on the HTML page leaderboard.html
+	populateLeaderboard() {
+		const leaderboardContainer = document.getElementById("leaderboardContainer");
+		while (leaderboardContainer.firstChild) {
+			leaderboardContainer.removeChild(leaderboardContainer.firstChild);
+		}
+		players.forEach(player => {
+			const cardElement = this._createCard(player);
+			leaderboardContainer.appendChild(cardElement);
+		});
+	}
 
 }
 
@@ -497,28 +555,28 @@ rhit.Game = class {
 
 	initializeGame() {
 		this.board[0][7] = rhit.Game.Piece.BLACK_ROOK;
-		this.board[1][7] = rhit.Game.Piece.BLACK_KNIGHT;
-		this.board[2][7] = rhit.Game.Piece.BLACK_BISHOP;
-		this.board[3][7] = rhit.Game.Piece.BLACK_QUEEN;
-		this.board[4][7] = rhit.Game.Piece.BLACK_KING;
-		this.board[5][7] = rhit.Game.Piece.BLACK_BISHOP;
-		this.board[6][7] = rhit.Game.Piece.BLACK_KNIGHT;
-		this.board[7][7] = rhit.Game.Piece.BLACK_ROOK;
-		for (let i = 0; i < 8; i++) {
-			this.board[i][6] = rhit.Game.Piece.BLACK_PAWN;
-		}
+		// this.board[1][7] = rhit.Game.Piece.BLACK_KNIGHT;
+		// this.board[2][7] = rhit.Game.Piece.BLACK_BISHOP;
+		// this.board[3][7] = rhit.Game.Piece.BLACK_QUEEN;
+		// this.board[4][7] = rhit.Game.Piece.BLACK_KING;
+		// this.board[5][7] = rhit.Game.Piece.BLACK_BISHOP;
+		// this.board[6][7] = rhit.Game.Piece.BLACK_KNIGHT;
+		// this.board[7][7] = rhit.Game.Piece.BLACK_ROOK;
+		// for (let i = 0; i < 8; i++) {
+		// 	this.board[i][6] = rhit.Game.Piece.BLACK_PAWN;
+		// }
 
 		this.board[0][0] = rhit.Game.Piece.WHITE_ROOK;
-		this.board[1][0] = rhit.Game.Piece.WHITE_KNIGHT;
-		this.board[2][0] = rhit.Game.Piece.WHITE_BISHOP;
-		this.board[3][0] = rhit.Game.Piece.WHITE_QUEEN;
-		this.board[4][0] = rhit.Game.Piece.WHITE_KING;
-		this.board[5][0] = rhit.Game.Piece.WHITE_BISHOP;
-		this.board[6][0] = rhit.Game.Piece.WHITE_KNIGHT;
-		this.board[7][0] = rhit.Game.Piece.WHITE_ROOK;
-		for (let j = 0; j < 8; j++) {
-			this.board[j][1] = rhit.Game.Piece.WHITE_PAWN;
-		}
+		// this.board[1][0] = rhit.Game.Piece.WHITE_KNIGHT;
+		// this.board[2][0] = rhit.Game.Piece.WHITE_BISHOP;
+		// this.board[3][0] = rhit.Game.Piece.WHITE_QUEEN;
+		// this.board[4][0] = rhit.Game.Piece.WHITE_KING;
+		// this.board[5][0] = rhit.Game.Piece.WHITE_BISHOP;
+		// this.board[6][0] = rhit.Game.Piece.WHITE_KNIGHT;
+		// this.board[7][0] = rhit.Game.Piece.WHITE_ROOK;
+		// for (let j = 0; j < 8; j++) {
+		// 	this.board[j][1] = rhit.Game.Piece.WHITE_PAWN;
+		// }
 		console.log(this.board);
 	}
 
@@ -589,21 +647,24 @@ rhit.Game = class {
 	getBlackPawnMoves(i, j, locations) {
 		let loci = 0;
 
-		let possiblei = i - 1; let possiblej = j - 1;
+		let possiblei = i - 1;
+		let possiblej = j - 1;
 		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
-		possiblei = i + 1; possiblej = j - 1;
+		possiblei = i + 1;
+		possiblej = j - 1;
 		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
-		possiblei = i; possiblej = j - 1;
-		if (possiblei >= 0 && possiblei <= 7 && possiblej >= 0 && possiblej <= 7
-			&& this.board[possiblei][possiblej].includes("White")) {
+		possiblei = i;
+		possiblej = j - 1;
+		if (possiblei >= 0 && possiblei <= 7 && possiblej >= 0 && possiblej <= 7 &&
+			this.board[possiblei][possiblej].includes("White")) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -614,21 +675,24 @@ rhit.Game = class {
 	getWhitePawnMoves(i, j, locations) {
 		let loci = 0;
 
-		let possiblei = i - 1; let possiblej = j + 1;
+		let possiblei = i - 1;
+		let possiblej = j + 1;
 		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
-		possiblei = i + 1; possiblej = j + 1;
+		possiblei = i + 1;
+		possiblej = j + 1;
 		if (this.checkValid(possiblei, possiblej) && this.board[possiblei][possiblej] == rhit.Game.Piece.NONE) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
 
-		possiblei = i; possiblej = j + 1;
-		if (possiblei >= 0 && possiblei <= 7 && possiblej >= 0 && possiblej <= 7
-			&& this.board[possiblei][possiblej].includes("Black")) {
+		possiblei = i;
+		possiblej = j + 1;
+		if (possiblei >= 0 && possiblei <= 7 && possiblej >= 0 && possiblej <= 7 &&
+			this.board[possiblei][possiblej].includes("Black")) {
 			locations[loci] = "" + possiblei + possiblej;
 			loci++;
 		}
@@ -1131,12 +1195,12 @@ rhit.initializePage = function () {
 		new rhit.blackLoginPageController();
 	}
 	if (document.querySelector("#gameBoardPage")) {
-		new rhit.gameBoardPageController();
+		rhit.gameBoardPageController = new rhit.GameBoardPageController();
+		rhit.leaderboardPageController = new rhit.LeaderboardPageController();
 		console.log(`Signed in as: ${localStorage.getItem("whiteUserName")} and ${localStorage.getItem("blackUserName")}`);
 	}
 
 	if (document.querySelector("#leaderboardPage")) {
-		new rhit.leaderboardPageController();
 	}
 }
 
