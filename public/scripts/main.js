@@ -53,7 +53,8 @@ rhit.blackLoginPageController = class {
 
 rhit.deleteAccountController = class {
 	constructor() {
-		document.querySelector("")
+		document.querySelector("#l1").innerHTML = "Delete Data: " + rhit.blackAuthManager.uidBlack;
+		document.querySelector("#l2").innerHTML = "Delete Data: " + rhit.whiteAuthManager.uidWhite;
 	};
 }
 
