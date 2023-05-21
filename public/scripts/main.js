@@ -147,8 +147,22 @@ rhit.GameBoardPageController = class {
 								}
 								if (wincount == 0 && this.game.getState() == rhit.Game.State.BLACK_TURN) {
 									this.game.state = rhit.Game.State.BLACK_WIN;
+									document.getElementById("winTitle").innerHTML = "Black Wins!";
+									document.getElementById("winText").innerHTML = "Congratulations. Would you like to submit your results?";
+									$('#winModal').modal({backdrop: 'static', keyboard: false});
+									document.getElementById("submitButton").onclick = (event) => {
+										rhit.leaderboardPageController.updateOnGameOver();
+										$('#winModal').modal('hide');
+									}
 								} else if (wincount == 0 && this.game.getState() == rhit.Game.State.WHITE_TURN) {
 									this.game.state = rhit.Game.State.WHITE_WIN;
+									document.getElementById("winTitle").innerHTML = "White Wins!";
+									document.getElementById("winText").innerHTML = "Congratulations. Would you like to submit your results?";
+									$('#winModal').modal({backdrop: 'static', keyboard: false});
+									document.getElementById("submitButton").onclick = (event) => {
+										rhit.leaderboardPageController.updateOnGameOver();
+										$('#winModal').modal('hide');
+									}
 								}
 
 
@@ -262,7 +276,7 @@ rhit.LeaderboardPageController = class {
 		//...
 	}
 
-	//load data of all users ever saved
+	//load data of top 5 users
 	loadPlayerData() {
 
 	}

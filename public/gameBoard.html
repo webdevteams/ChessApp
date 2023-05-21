@@ -39,6 +39,7 @@
             class="material-icons">delete</i>Delete Account</a>
       </ul>
     </div>
+
     <!-- Modal -->
     <div class="modal fade" id="movesModal" tabindex="-1" role="dialog" aria-labelledby="movesTitle"
       aria-hidden="true">
@@ -80,6 +81,25 @@
         </div>
       </div>
     </div>
+
+    <!-- Win Game Modal -->
+    <div class="modal fade" id="winModal" tabindex="-1" role="dialog" aria-labelledby="winTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="winTitle">Win Title</h5>
+          </div>
+          <div class="modal-body">
+            <p id="winText">Win Text</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="submitButton" class="btn btn-primary">Submit Results</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard Game</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <main class="bmd-layout-content">
       <div id="gameBoardPage" class="container page-container-board">
         <table class="chess-board">
