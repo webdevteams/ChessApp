@@ -172,11 +172,18 @@ td img {
 }
 
 #l1 {
-    margin-top: 200px;
+    margin-top: 100px;
     margin-bottom: 50px;
 }
 
 #l2 {
-    margin-bottom: 200px;
+    margin-bottom: 150px;
     margin-top: 50px;
+}
+
+#confirmDelete {
+    margin-bottom: 20px;
+    background-color: red;
+    color:white;
+    border-color: red;
 }
