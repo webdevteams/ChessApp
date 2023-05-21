@@ -303,7 +303,7 @@ rhit.LeaderboardPageController = class {
 		this._ref.where("user", "==", this.blackUsername).get()
 			.then((querySnapshot) => {
 				if (querySnapshot.empty) {
-					savePlayerData(this.blackUsername);
+					this.savePlayerData(this.blackUsername);
 				} else {
 					this.blackDocId = querySnapshot.docs[0].id;
 					this._ref.doc(this.blackDocId).get().then(doc => {
