@@ -244,8 +244,8 @@ rhit.gameBoardPageController = class {
 rhit.leaderboardPageController = class {
 	constructor() {
 
-        console.log("Black id = ", this.blackAuthManager.uidBlack());
-        console.log("White id = ", this.whiteAuthManager.uidWhite());
+        console.log("Black id = ", this.blackAuthManager.uidBlack);
+        console.log("White id = ", this.whiteAuthManager.uidWhite);
 
 		document.querySelector("#menuSignOut").onclick = (event) => {
 			rhit.whiteAuthManager.signOut();

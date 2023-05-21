@@ -250,11 +250,113 @@ rhit.gameBoardPageController = class {
 
 rhit.leaderboardPageController = class {
 	constructor() {
+
+		let blackUsername = `${localStorage.getItem("blackUserName")}`;
+		let whiteUserName = `${localStorage.getItem("whiteUserName")}`;
+        console.log(`Black user: ${localStorage.getItem("blackUserName")}`);
+        console.log(`White user: ${localStorage.getItem("whiteUserName")}`);
+
 		document.querySelector("#menuSignOut").onclick = (event) => {
 			rhit.whiteAuthManager.signOut();
 			rhit.blackAuthManager.signOut();
 		};
+
+		this.players = []; // Array to store player information
+        //...
 	}
+
+	loadPlayerData() {
+		
+	}
+
+	savePlayerData() {
+		
+	}
+
+	addNewPlayer(username) {
+		
+	}
+
+	updateOnGameOver(player1, player2) {
+		
+	} 
+
+    _createCard(player) {
+        const cardTemplate = `
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">${player.name}</h5>
+                    <p class="card-text">Games Played: ${player.gamesPlayed}</p>
+                    <p class="card-text">Wins: ${player.wins}</p>
+                </div>
+            </div>
+        `;
+        return htmlToElement(cardTemplate);
+    }
+
+    //given a list of players, change the HTML page leaderboard.html
+    populateLeaderboard() {
+        const leaderboardContainer = document.getElementById("leaderboardContainer");
+        while (leaderboardContainer.firstChild) {
+            leaderboardContainer.removeChild(leaderboardContainer.firstChild);
+        }
+        players.forEach(player => {
+            const cardElement = this._createCard(player);
+            leaderboardContainer.appendChild(cardElement);
+        });
+    }
+
+}
+
+
+rhit.WhiteAuthManager = class {
+	constructor() {
+		this._whiteUser = null;
+	}
+
+	beginListening(changeListener) {
+		firebase.auth().onAuthStateChanged((whiteUser) => {
+			this._whiteUser = whiteUser;
+			console.log("this.whiteuser" + this._whiteUser)
+			changeListener();
+		});
+	}
+
+	signIn() {
+		console.log("Sign in using rosefire");
+		Rosefire.signIn("41b7b93b-3c9d-4f2c-83cb-e57e90cba145", (err, rfUser) => {
+			if (err) {
+				console.log("Rosefire error!", err);
+				return;
+			}
+			console.log("Rosefire success!", rfUser);
+			firebase.auth().signInWithCustomToken(rfUser.token).catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				if (errorCode === 'auth/invalid-custom-token') {
+					alert('The token you have provided is not valid.');
+				} else {
+					console.error("Custom auth error", errorCode, errorMessage);
+				}
+			});
+		});
+	}
+
+	signOut() {
+		firebase.auth().signOut().catch(function (error) {
+			console.log("Sign out error");
+		});
+		console.log("white signed out = " + !this.isWhiteSignedIn);
+	}
+
+	get isWhiteSignedIn() {
+		return !!this._whiteUser;
+	}
+
+	get uidWhite() {
+		return this._whiteUser.uid;
+	}
+
 }
 
 rhit.WhiteAuthManager = class {
