@@ -1,29 +1,8 @@
 var rhit = rhit || {};
 
-/** globals */
-rhit.variableName = "";
-
 rhit.whiteAuthManager = null;
 rhit.blackAuthManager = null;
 
-rhit.ClassName = class {
-	constructor() {
-
-	}
-
-	methodName() {
-
-	}
-}
-/*
-rhit.loginPageController = class {
-	constructor() {
-		document.querySelector("#loginButton").onclick = (event) => {
-			rhit.fbAuthManager.signIn();
-		};
-	}
-}
-*/
 // From https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro/35385518#35385518
 function htmlToElement(html) {
 	var template = document.createElement('template');
@@ -76,9 +55,9 @@ rhit.deleteAccountController = class {
 					.then((querySnapshot) => {
 						this._ref.doc(querySnapshot.docs[0].id).delete().then(() => {
 							console.log("Document successfully deleted!");
-					}).catch((error) => {
+						}).catch((error) => {
 							console.error("Error removing document: ", error);
-					});
+						});
 					});
 			}
 			if (document.getElementById("c2").checked) {
@@ -86,9 +65,9 @@ rhit.deleteAccountController = class {
 					.then((querySnapshot) => {
 						this._ref.doc(querySnapshot.docs[0].id).delete().then(() => {
 							console.log("Document successfully deleted!");
-					}).catch((error) => {
+						}).catch((error) => {
 							console.error("Error removing document: ", error);
-					});
+						});
 					});
 			}
 			rhit.whiteAuthManager.signOut();
@@ -189,7 +168,10 @@ rhit.GameBoardPageController = class {
 									this.game.state = rhit.Game.State.BLACK_WIN;
 									document.getElementById("winTitle").innerHTML = "Black Wins!";
 									document.getElementById("winText").innerHTML = "Congratulations. Would you like to submit your results?";
-									$('#winModal').modal({backdrop: 'static', keyboard: false});
+									$('#winModal').modal({
+										backdrop: 'static',
+										keyboard: false
+									});
 									document.getElementById("submitButton").onclick = (event) => {
 										rhit.leaderboardPageController.updateOnGameOver();
 										$('#winModal').modal('hide');
@@ -198,7 +180,10 @@ rhit.GameBoardPageController = class {
 									this.game.state = rhit.Game.State.WHITE_WIN;
 									document.getElementById("winTitle").innerHTML = "White Wins!";
 									document.getElementById("winText").innerHTML = "Congratulations. Would you like to submit your results?";
-									$('#winModal').modal({backdrop: 'static', keyboard: false});
+									$('#winModal').modal({
+										backdrop: 'static',
+										keyboard: false
+									});
 									document.getElementById("submitButton").onclick = (event) => {
 										rhit.leaderboardPageController.updateOnGameOver();
 										$('#winModal').modal('hide');
@@ -342,7 +327,7 @@ rhit.LeaderboardPageController = class {
 	}
 
 	//self explanatory
- 	updateOnGameOver() {
+	updateOnGameOver() {
 		this._ref.where("user", "==", this.blackUsername).get()
 			.then(async (querySnapshot) => {
 				if (querySnapshot.empty) {
@@ -416,7 +401,7 @@ rhit.LeaderboardPageController = class {
 			leaderboardContainer.removeChild(leaderboardContainer.firstChild);
 		}
 		await this.loadPlayerData();
-		for(let i = 0; i < this.players.length; i++) {
+		for (let i = 0; i < this.players.length; i++) {
 			const cardElement = this._createCard(this.players[i]);
 			leaderboardContainer.appendChild(cardElement);
 		}
@@ -1266,13 +1251,13 @@ rhit.initializePage = function () {
 	}
 
 	if (document.querySelector("#leaderboardPage")) {
-		if(!rhit.leaderboardPageController) {
+		if (!rhit.leaderboardPageController) {
 			rhit.leaderboardPageController = new rhit.LeaderboardPageController();
 		}
 		rhit.leaderboardPageController.populateLeaderboard();
 	}
 
-	if(document.querySelector("#deleteAccountPage")) {
+	if (document.querySelector("#deleteAccountPage")) {
 		new rhit.deleteAccountController();
 	}
 }
