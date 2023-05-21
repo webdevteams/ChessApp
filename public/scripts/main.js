@@ -605,28 +605,28 @@ rhit.Game = class {
 
 	initializeGame() {
 		this.board[0][7] = rhit.Game.Piece.BLACK_ROOK;
-		// this.board[1][7] = rhit.Game.Piece.BLACK_KNIGHT;
-		// this.board[2][7] = rhit.Game.Piece.BLACK_BISHOP;
-		// this.board[3][7] = rhit.Game.Piece.BLACK_QUEEN;
-		// this.board[4][7] = rhit.Game.Piece.BLACK_KING;
-		// this.board[5][7] = rhit.Game.Piece.BLACK_BISHOP;
-		// this.board[6][7] = rhit.Game.Piece.BLACK_KNIGHT;
-		// this.board[7][7] = rhit.Game.Piece.BLACK_ROOK;
-		// for (let i = 0; i < 8; i++) {
-		// 	this.board[i][6] = rhit.Game.Piece.BLACK_PAWN;
-		// }
+		this.board[1][7] = rhit.Game.Piece.BLACK_KNIGHT;
+		this.board[2][7] = rhit.Game.Piece.BLACK_BISHOP;
+		this.board[3][7] = rhit.Game.Piece.BLACK_QUEEN;
+		this.board[4][7] = rhit.Game.Piece.BLACK_KING;
+		this.board[5][7] = rhit.Game.Piece.BLACK_BISHOP;
+		this.board[6][7] = rhit.Game.Piece.BLACK_KNIGHT;
+		this.board[7][7] = rhit.Game.Piece.BLACK_ROOK;
+		for (let i = 0; i < 8; i++) {
+			this.board[i][6] = rhit.Game.Piece.BLACK_PAWN;
+		}
 
 		this.board[0][0] = rhit.Game.Piece.WHITE_ROOK;
-		// this.board[1][0] = rhit.Game.Piece.WHITE_KNIGHT;
-		// this.board[2][0] = rhit.Game.Piece.WHITE_BISHOP;
-		// this.board[3][0] = rhit.Game.Piece.WHITE_QUEEN;
-		// this.board[4][0] = rhit.Game.Piece.WHITE_KING;
-		// this.board[5][0] = rhit.Game.Piece.WHITE_BISHOP;
-		// this.board[6][0] = rhit.Game.Piece.WHITE_KNIGHT;
-		// this.board[7][0] = rhit.Game.Piece.WHITE_ROOK;
-		// for (let j = 0; j < 8; j++) {
-		// 	this.board[j][1] = rhit.Game.Piece.WHITE_PAWN;
-		// }
+		this.board[1][0] = rhit.Game.Piece.WHITE_KNIGHT;
+		this.board[2][0] = rhit.Game.Piece.WHITE_BISHOP;
+		this.board[3][0] = rhit.Game.Piece.WHITE_QUEEN;
+		this.board[4][0] = rhit.Game.Piece.WHITE_KING;
+		this.board[5][0] = rhit.Game.Piece.WHITE_BISHOP;
+		this.board[6][0] = rhit.Game.Piece.WHITE_KNIGHT;
+		this.board[7][0] = rhit.Game.Piece.WHITE_ROOK;
+		for (let j = 0; j < 8; j++) {
+			this.board[j][1] = rhit.Game.Piece.WHITE_PAWN;
+		}
 		console.log(this.board);
 	}
 
