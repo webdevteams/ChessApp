@@ -60,8 +60,41 @@ rhit.blackLoginPageController = class {
 
 rhit.deleteAccountController = class {
 	constructor() {
-		document.querySelector("#l1").innerHTML = "Delete Data: " + rhit.blackAuthManager.uidBlack;
-		document.querySelector("#l2").innerHTML = "Delete Data: " + rhit.whiteAuthManager.uidWhite;
+		document.querySelector("#l1").innerHTML = `<input id="c1" type="checkbox">
+		<span class="checkmark"></span>Delete Data: ${localStorage.getItem("blackUserName")}`;
+		document.querySelector("#l2").innerHTML = `<input id="c2" type="checkbox">
+		<span class="checkmark"></span>Delete Data: ${localStorage.getItem("whiteUserName")}`;
+
+		document.getElementById("cancelDelete").onclick = (event) => {
+			window.location.href = "/gameBoard.html";
+		}
+
+		document.getElementById("confirmDelete").onclick = async (event) => {
+			this._ref = firebase.firestore().collection("Users");
+			if (document.getElementById("c1").checked) {
+				await this._ref.where("user", "==", `${localStorage.getItem("blackUserName")}`).get()
+					.then((querySnapshot) => {
+						this._ref.doc(querySnapshot.docs[0].id).delete().then(() => {
+							console.log("Document successfully deleted!");
+					}).catch((error) => {
+							console.error("Error removing document: ", error);
+					});
+					});
+			}
+			if (document.getElementById("c2").checked) {
+				await this._ref.where("user", "==", `${localStorage.getItem("whiteUserName")}`).get()
+					.then((querySnapshot) => {
+						this._ref.doc(querySnapshot.docs[0].id).delete().then(() => {
+							console.log("Document successfully deleted!");
+					}).catch((error) => {
+							console.error("Error removing document: ", error);
+					});
+					});
+			}
+			rhit.whiteAuthManager.signOut();
+			rhit.blackAuthManager.signOut();
+			window.location.href = "/index.html"
+		}
 	};
 }
 
@@ -389,6 +422,13 @@ rhit.LeaderboardPageController = class {
 		}
 	}
 
+	deleteBlackData() {
+		this._ref.doc(rhit.leaderboardPageController.blackDocId).delete();
+	}
+
+	deleteWhiteData() {
+		this._ref.doc(rhit.leaderboardPageController.whiteDocId).delete();
+	}
 }
 
 
@@ -1230,6 +1270,10 @@ rhit.initializePage = function () {
 			rhit.leaderboardPageController = new rhit.LeaderboardPageController();
 		}
 		rhit.leaderboardPageController.populateLeaderboard();
+	}
+
+	if(document.querySelector("#deleteAccountPage")) {
+		new rhit.deleteAccountController();
 	}
 }
 
