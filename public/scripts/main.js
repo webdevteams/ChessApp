@@ -24,6 +24,13 @@ rhit.loginPageController = class {
 	}
 }
 */
+// From https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro/35385518#35385518
+function htmlToElement(html) {
+	var template = document.createElement('template');
+	html = html.trim();
+	template.innerHTML = html;
+	return template.content.firstChild;
+}
 
 rhit.indexPageController = class {
 	constructor() {
@@ -277,7 +284,7 @@ rhit.LeaderboardPageController = class {
 
 	//load data of top 5 users
 	loadPlayerData() {
-		firebase.firestore().collection("Users").orderBy("wins", "desc").limit(5).get().then(querySnapshot => {
+		return firebase.firestore().collection("Users").orderBy("wins", "desc").limit(5).get().then(querySnapshot => {
 			querySnapshot.forEach(doc => {
 				this.players.push(doc.data());
 			})
@@ -286,7 +293,7 @@ rhit.LeaderboardPageController = class {
 
 	//add new player to database if doesn't exist already
 	savePlayerData(playerName) {
-		this._ref.add({
+		return this._ref.add({
 				["games"]: 1,
 				["lastUpdated"]: firebase.firestore.Timestamp.now(),
 				["user"]: playerName,
@@ -302,14 +309,14 @@ rhit.LeaderboardPageController = class {
 	}
 
 	//self explanatory
-	updateOnGameOver() {
+ 	updateOnGameOver() {
 		this._ref.where("user", "==", this.blackUsername).get()
-			.then((querySnapshot) => {
+			.then(async (querySnapshot) => {
 				if (querySnapshot.empty) {
-					this.savePlayerData(rhit.leaderboardPageController.blackUsername);
+					await this.savePlayerData(rhit.leaderboardPageController.blackUsername);
 				} else {
 					rhit.leaderboardPageController.blackDocId = querySnapshot.docs[0].id;
-					this._ref.doc(rhit.leaderboardPageController.blackDocId).get().then(doc => {
+					await this._ref.doc(rhit.leaderboardPageController.blackDocId).get().then(doc => {
 						let games = doc.data().games + 1;
 						this._ref.doc(rhit.leaderboardPageController.blackDocId).update({
 							["lastUpdated"]: firebase.firestore.Timestamp.now(),
@@ -320,12 +327,12 @@ rhit.LeaderboardPageController = class {
 			})
 			.then(response => {
 				this._ref.where("user", "==", this.whiteUsername).get()
-					.then((querySnapshot) => {
+					.then(async (querySnapshot) => {
 						if (querySnapshot.empty) {
-							this.savePlayerData(rhit.leaderboardPageController.whiteUsername);
+							await this.savePlayerData(rhit.leaderboardPageController.whiteUsername);
 						} else {
 							rhit.leaderboardPageController.whiteDocId = querySnapshot.docs[0].id;
-							this._ref.doc(rhit.leaderboardPageController.whiteDocId).get().then(doc => {
+							await this._ref.doc(rhit.leaderboardPageController.whiteDocId).get().then(doc => {
 								let games = doc.data().games + 1;
 								this._ref.doc(rhit.leaderboardPageController.whiteDocId).update({
 									["lastUpdated"]: firebase.firestore.Timestamp.now(),
@@ -333,9 +340,9 @@ rhit.LeaderboardPageController = class {
 								});
 							});
 						}
-					}).then(response => {
+					}).then(async response => {
 						if (rhit.gameBoardPageController.game.state == rhit.Game.State.BLACK_WIN) {
-							this._ref.doc(rhit.leaderboardPageController.blackDocId).get().then(doc => {
+							await this._ref.doc(rhit.leaderboardPageController.blackDocId).get().then(doc => {
 								let wins = doc.data().wins + 1;
 								this._ref.doc(rhit.leaderboardPageController.blackDocId).update({
 									["lastUpdated"]: firebase.firestore.Timestamp.now(),
@@ -343,7 +350,7 @@ rhit.LeaderboardPageController = class {
 								});
 							});
 						} else {
-							this._ref.doc(rhit.leaderboardPageController.whiteDocId).get().then(doc => {
+							await this._ref.doc(rhit.leaderboardPageController.whiteDocId).get().then(doc => {
 								let wins = doc.data().wins + 1;
 								this._ref.doc(rhit.leaderboardPageController.whiteDocId).update({
 									["lastUpdated"]: firebase.firestore.Timestamp.now(),
@@ -370,17 +377,15 @@ rhit.LeaderboardPageController = class {
 	}
 
 	//given a list of players, populate this list on the HTML page leaderboard.html
-	populateLeaderboard() {
+	async populateLeaderboard() {
 		const leaderboardContainer = document.getElementById("leaderboardContainer");
 		while (leaderboardContainer.firstChild) {
 			leaderboardContainer.removeChild(leaderboardContainer.firstChild);
 		}
-		this.loadPlayerData();
-		for(let i = 0; i < this.players.length + 1; i++) {
-			console.log(i);
+		await this.loadPlayerData();
+		for(let i = 0; i < this.players.length; i++) {
 			const cardElement = this._createCard(this.players[i]);
 			leaderboardContainer.appendChild(cardElement);
-			console.log(cardElement);
 		}
 	}
 

@@ -187,3 +187,8 @@ td img {
     color:white;
     border-color: red;
 }
+
+.card {
+    margin-bottom: 10px;
+    background-color: #D9D9D9;
+}
