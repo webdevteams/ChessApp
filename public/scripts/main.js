@@ -273,12 +273,15 @@ rhit.LeaderboardPageController = class {
 		this.whiteDocId = null;
 
 		this.players = []; // Array to store player information
-		//...
 	}
 
 	//load data of top 5 users
 	loadPlayerData() {
-
+		firebase.firestore().collection("Users").orderBy("wins", "desc").limit(5).get().then(querySnapshot => {
+			querySnapshot.forEach(doc => {
+				this.players.push(doc.data());
+			})
+		});
 	}
 
 	//add new player to database if doesn't exist already
@@ -290,10 +293,10 @@ rhit.LeaderboardPageController = class {
 				["wins"]: 0
 			})
 			.then(function (docRef) {
-				if (playerName == this.blackUsername) {
-					this.blackDocId = docRef.id;
+				if (playerName == rhit.leaderboardPageController.blackUsername) {
+					rhit.leaderboardPageController.blackDocId = docRef.id;
 				} else {
-					this.whiteDocId = docRef.id;
+					rhit.leaderboardPageController.whiteDocId = docRef.id;
 				}
 			});
 	}
@@ -303,12 +306,12 @@ rhit.LeaderboardPageController = class {
 		this._ref.where("user", "==", this.blackUsername).get()
 			.then((querySnapshot) => {
 				if (querySnapshot.empty) {
-					this.savePlayerData(this.blackUsername);
+					this.savePlayerData(rhit.leaderboardPageController.blackUsername);
 				} else {
-					this.blackDocId = querySnapshot.docs[0].id;
-					this._ref.doc(this.blackDocId).get().then(doc => {
+					rhit.leaderboardPageController.blackDocId = querySnapshot.docs[0].id;
+					this._ref.doc(rhit.leaderboardPageController.blackDocId).get().then(doc => {
 						let games = doc.data().games + 1;
-						this._ref.doc(this.blackDocId).update({
+						this._ref.doc(rhit.leaderboardPageController.blackDocId).update({
 							["lastUpdated"]: firebase.firestore.Timestamp.now(),
 							["games"]: games
 						});
@@ -319,12 +322,12 @@ rhit.LeaderboardPageController = class {
 				this._ref.where("user", "==", this.whiteUsername).get()
 					.then((querySnapshot) => {
 						if (querySnapshot.empty) {
-							savePlayerData(this.whiteUsername);
+							this.savePlayerData(rhit.leaderboardPageController.whiteUsername);
 						} else {
-							this.whiteDocId = querySnapshot.docs[0].id;
-							this._ref.doc(this.whiteDocId).get().then(doc => {
+							rhit.leaderboardPageController.whiteDocId = querySnapshot.docs[0].id;
+							this._ref.doc(rhit.leaderboardPageController.whiteDocId).get().then(doc => {
 								let games = doc.data().games + 1;
-								this._ref.doc(this.whiteDocId).update({
+								this._ref.doc(rhit.leaderboardPageController.whiteDocId).update({
 									["lastUpdated"]: firebase.firestore.Timestamp.now(),
 									["games"]: games
 								});
@@ -332,17 +335,17 @@ rhit.LeaderboardPageController = class {
 						}
 					}).then(response => {
 						if (rhit.gameBoardPageController.game.state == rhit.Game.State.BLACK_WIN) {
-							this._ref.doc(this.blackDocId).get().then(doc => {
+							this._ref.doc(rhit.leaderboardPageController.blackDocId).get().then(doc => {
 								let wins = doc.data().wins + 1;
-								this._ref.doc(this.blackDocId).update({
+								this._ref.doc(rhit.leaderboardPageController.blackDocId).update({
 									["lastUpdated"]: firebase.firestore.Timestamp.now(),
 									["wins"]: wins
 								});
 							});
 						} else {
-							this._ref.doc(this.whiteDocId).get().then(doc => {
+							this._ref.doc(rhit.leaderboardPageController.whiteDocId).get().then(doc => {
 								let wins = doc.data().wins + 1;
-								this._ref.doc(this.whiteDocId).update({
+								this._ref.doc(rhit.leaderboardPageController.whiteDocId).update({
 									["lastUpdated"]: firebase.firestore.Timestamp.now(),
 									["wins"]: wins
 								});
@@ -357,8 +360,8 @@ rhit.LeaderboardPageController = class {
 		const cardTemplate = `
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">${player.name}</h5>
-                    <p class="card-text">Games Played: ${player.gamesPlayed}</p>
+                    <h5 class="card-title">${player.user}</h5>
+                    <p class="card-text">Games Played: ${player.games}</p>
                     <p class="card-text">Wins: ${player.wins}</p>
                 </div>
             </div>
@@ -372,10 +375,13 @@ rhit.LeaderboardPageController = class {
 		while (leaderboardContainer.firstChild) {
 			leaderboardContainer.removeChild(leaderboardContainer.firstChild);
 		}
-		players.forEach(player => {
-			const cardElement = this._createCard(player);
+		this.loadPlayerData();
+		for(let i = 0; i < this.players.length + 1; i++) {
+			console.log(i);
+			const cardElement = this._createCard(this.players[i]);
 			leaderboardContainer.appendChild(cardElement);
-		});
+			console.log(cardElement);
+		}
 	}
 
 }
@@ -1215,6 +1221,10 @@ rhit.initializePage = function () {
 	}
 
 	if (document.querySelector("#leaderboardPage")) {
+		if(!rhit.leaderboardPageController) {
+			rhit.leaderboardPageController = new rhit.LeaderboardPageController();
+		}
+		rhit.leaderboardPageController.populateLeaderboard();
 	}
 }
 
